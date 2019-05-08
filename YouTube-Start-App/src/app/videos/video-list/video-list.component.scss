@@ -1,0 +1,27 @@
+$btn-remove-size: 50px;
+$video-box-size: 200px;
+
+button.remove {
+    font-size: 40px;
+    line-height: 15px;
+    background-color: #CF2D00;
+    color: white;
+    border: none;
+    padding: 0;
+    border-radius: 25%;
+    width: $btn-remove-size;
+    height: $btn-remove-size;
+}
+
+.video-box {
+    background-color: #989898;
+    width: $video-box-size;
+}
+
+.video-container {
+    height: $video-box-size;
+}
+
+.video-info {
+    min-width: 300px;
+}

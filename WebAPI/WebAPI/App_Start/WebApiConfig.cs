@@ -12,6 +12,7 @@ namespace WebAPI
             // Конфигурация и службы веб-API
 
             // Маршруты веб-API
+            config.EnableCors();
             config.MapHttpAttributeRoutes();
 
             config.Routes.MapHttpRoute(
