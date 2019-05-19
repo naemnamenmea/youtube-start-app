@@ -15,11 +15,12 @@ export class VideoService {
 
   refreshList() {
     this.http.get(this.rootURL + '/Video')
-      .toPromise().then(res => this.videoList = res as Video[]);
+      .subscribe(res => this.videoList = res as Video[]);
   }
 
   addVideo(video: Video) {
-    return this.http.post(this.rootURL + '/Video', video);
+    return this.http.post(this.rootURL + '/Video', video)
+    .subscribe(res => this.videoList.push(res as Video));
   }
 }
 
