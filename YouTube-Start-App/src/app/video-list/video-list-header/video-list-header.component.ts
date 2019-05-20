@@ -5,6 +5,8 @@ import { FormModalNewVideoComponent } from '../../form-modal-new-video/form-moda
 import { Video } from '../../shared/video.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
+import { NgForm } from '@angular/forms';
+import { ToolsService } from 'src/app/shared/tools.service';
 
 @Component({
   selector: 'app-video-list-header',
@@ -12,11 +14,12 @@ import { HttpClient } from '@angular/common/http';
   styleUrls: ['./video-list-header.component.scss']
 })
 
-export class VideoListHeaderComponent implements OnInit { 
+export class VideoListHeaderComponent implements OnInit {
 
   constructor(
     private service: VideoService,
-    private modalService: NgbModal
+    private modalService: NgbModal,
+    private net: ToolsService
   ) { }
 
   ngOnInit() {
@@ -25,14 +28,15 @@ export class VideoListHeaderComponent implements OnInit {
 
   openFormModal() {
     const modalRef = this.modalService.open(FormModalNewVideoComponent);
-
-    modalRef.result.then((result: Video) => {
-      if (!this.service.existsVideo(result.id)) {
-        throw 'url ( ' + result.id + ' ) doen`t exists';
+    modalRef.result.then((res: any) => {
+      let video = new Video()
+      let params = this.net.getParamsURL(res.url);
+      video.id = this.net.getValueByKeyFromURL(params, "v");
+      if (!this.service.existsVideo(video.id)) {
+        throw 'url ( ' + video.id + ' ) doen`t exists';
       }
-      console.log('Exists');
-      result.postedDate = new Date();
-      this.service.addVideo(result);
+      video.postedDate = new Date();
+      this.service.addVideo(video);
     }).catch((error) => {
       console.log(error);
     });
