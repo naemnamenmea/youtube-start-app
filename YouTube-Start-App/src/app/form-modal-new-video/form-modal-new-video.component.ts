@@ -10,9 +10,15 @@ import { VideoService } from '../shared/video.service';
 })
 export class FormModalNewVideoComponent implements OnInit {
 
+<<<<<<< HEAD
   @Input() myForm: FormGroup;
   //@Input() url: String;
   //@Input() title: String;
+=======
+  @Input() id: number;
+  myForm: FormGroup;
+  name = new FormControl('');
+>>>>>>> 9fad9b6f41358779d01dbcd899127b78edc73c90
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -35,9 +41,20 @@ export class FormModalNewVideoComponent implements OnInit {
   }
   
   private submitForm() {
+<<<<<<< HEAD
     this.activeModal.close(this.myForm.value);
   }
 
+=======
+    //this.service.addVideo(this.myForm);
+    this.activeModal.close(this.myForm.value);
+  }
+
+  insertRecord() {
+    
+  }
+
+>>>>>>> 9fad9b6f41358779d01dbcd899127b78edc73c90
   closeModal() {
     this.activeModal.close('Modal Closed');
   }  

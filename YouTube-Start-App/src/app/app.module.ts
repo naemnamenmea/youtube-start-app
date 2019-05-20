@@ -35,7 +35,7 @@ import { EmbedVideo } from 'ngx-embed-video';
   providers: [
     DatePipe
   ],
-  bootstrap: [AppComponent],
+ bootstrap: [AppComponent],
   entryComponents: [
     FormModalNewVideoComponent
   ]

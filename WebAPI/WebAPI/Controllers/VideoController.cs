@@ -13,7 +13,11 @@ using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
+<<<<<<< HEAD
     [EnableCors(origins: "http://localhost:4205/", headers: "*", methods: "*")]
+=======
+    [EnableCors(origins: "http://localhost:4205", headers: "*", methods: "*")]
+>>>>>>> 9fad9b6f41358779d01dbcd899127b78edc73c90
     public class VideoController : ApiController
     {
         private DBModel db = new DBModel();

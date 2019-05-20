@@ -29,7 +29,7 @@ export class VideoService {
   }
 
   addVideo(video: Video) {
-    return this.http.post(this.rootURL + '/Video', video)
+    return this.http.post(this.rootURL + '/Video', video)          
       .subscribe(res => {
         this.videoList.push(res as Video)
         this.refreshList();
