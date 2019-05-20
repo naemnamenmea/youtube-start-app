@@ -209,6 +209,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>DBModels.edmx</DependentUpon>
     </Compile>
+    <Compile Include="Models\user.cs">
+      <DependentUpon>DBModels.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\video.cs">
       <DependentUpon>DBModels.tt</DependentUpon>
     </Compile>

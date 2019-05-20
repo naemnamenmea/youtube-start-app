@@ -25,6 +25,7 @@ namespace WebAPI.Models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<user> user { get; set; }
         public virtual DbSet<video> video { get; set; }
     }
 }

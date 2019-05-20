@@ -4,49 +4,75 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="Хранилище kontrolskij_a_task_0105Model" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="Хранилище kontrolskij_a_task_0105Model" Provider="MySql.Data.MySqlClient" ProviderManifestToken="5.7" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="password" Type="varchar" MaxLength="45" />
+          <Property Name="name" Type="varchar" MaxLength="45" />
+        </EntityType>
         <EntityType Name="video">
           <Key>
-            <PropertyRef Name="url" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="url" Type="varchar" MaxLength="200" Nullable="false" />
+          <Property Name="id" Type="varchar" MaxLength="200" Nullable="false" />
           <Property Name="title" Type="varchar" MaxLength="200" />
           <Property Name="postedDate" Type="date" />
           <Property Name="avScore" Type="float" />
         </EntityType>
         <EntityContainer Name="Хранилище kontrolskij_a_task_0105ModelContainer">
+          <EntitySet Name="user" EntityType="Self.user" Schema="kontrolskij_a_task_0105" store:Type="Tables" />
           <EntitySet Name="video" EntityType="Self.video" Schema="kontrolskij_a_task_0105" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="kontrolskij_a_task_0105Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="DBModel" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="user" EntityType="kontrolskij_a_task_0105Model.user" />
+          <EntitySet Name="video" EntityType="kontrolskij_a_task_0105Model.video" />
+        </EntityContainer>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="password" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+          <Property Name="name" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="video">
           <Key>
-            <PropertyRef Name="url" />
+            <PropertyRef Name="id" />
           </Key>
-          <Property Name="url" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="id" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="title" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="postedDate" Type="DateTime" />
           <Property Name="avScore" Type="Single" />
         </EntityType>
-        <EntityContainer Name="DBModel" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="video" EntityType="Self.video" />
-        </EntityContainer>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="Хранилище kontrolskij_a_task_0105ModelContainer" CdmEntityContainer="DBModel">
+          <EntitySetMapping Name="user">
+            <EntityTypeMapping TypeName="kontrolskij_a_task_0105Model.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="video">
             <EntityTypeMapping TypeName="kontrolskij_a_task_0105Model.video">
               <MappingFragment StoreEntitySet="video">
-                <ScalarProperty Name="url" ColumnName="url" />
-                <ScalarProperty Name="title" ColumnName="title" />
-                <ScalarProperty Name="postedDate" ColumnName="postedDate" />
                 <ScalarProperty Name="avScore" ColumnName="avScore" />
+                <ScalarProperty Name="postedDate" ColumnName="postedDate" />
+                <ScalarProperty Name="title" ColumnName="title" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

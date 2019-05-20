@@ -13,11 +13,8 @@ using WebAPI.Models;
 
 namespace WebAPI.Controllers
 {
-<<<<<<< HEAD
-    [EnableCors(origins: "http://localhost:4205/", headers: "*", methods: "*")]
-=======
+    //Response.AppendHeader("Access-Control-Allow-Origin", "*");
     [EnableCors(origins: "http://localhost:4205", headers: "*", methods: "*")]
->>>>>>> 9fad9b6f41358779d01dbcd899127b78edc73c90
     public class VideoController : ApiController
     {
         private DBModel db = new DBModel();
@@ -50,7 +47,7 @@ namespace WebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != video.url)
+            if (id != video.id)
             {
                 return BadRequest();
             }
@@ -93,7 +90,7 @@ namespace WebAPI.Controllers
             }
             catch (DbUpdateException)
             {
-                if (videoExists(video.url))
+                if (videoExists(video.id))
                 {
                     return Conflict();
                 }
@@ -103,7 +100,7 @@ namespace WebAPI.Controllers
                 }
             }
 
-            return CreatedAtRoute("DefaultApi", new { id = video.url }, video);
+            return CreatedAtRoute("DefaultApi", new { id = video.id }, video);
         }
 
         // DELETE: api/Video/5
@@ -133,7 +130,7 @@ namespace WebAPI.Controllers
 
         private bool videoExists(string id)
         {
-            return db.video.Count(e => e.url == id) > 0;
+            return db.video.Count(e => e.id == id) > 0;
         }
     }
 }
