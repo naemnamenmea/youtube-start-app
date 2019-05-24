@@ -15,7 +15,7 @@ namespace WebAPI.Controllers
 {
     //Response.AppendHeader("Access-Control-Allow-Origin", "*");
     [EnableCors(origins: "http://localhost:4205", headers: "*", methods: "*")]
-    public class VideoController : ApiController
+    public class VideosController : ApiController
     {
         private DBModel db = new DBModel();
 

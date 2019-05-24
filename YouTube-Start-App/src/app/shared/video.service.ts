@@ -10,32 +10,46 @@ export class VideoService {
 
   video: Video;
   videoList: Video[];
-  readonly rootURL = 'http://localhost:58965/api';
   readonly youtubeURL = 'https://www.youtube.com';
+  readonly rootURL = 'http://localhost:58965/api';
+  // readonly rootURL = 'https://localhost:44326/api';
+  readonly videosController = 'videos';
 
   constructor(
     private http: HttpClient,
     private embedService: EmbedVideoService
   ) {
-    let video_id = "jYvkMv7LzCw";
-    this.http.get("http://www.youtube.com/oembed?url=https://www.youtube.com/watch?v="
-    + video_id + "&format=json").subscribe(res => {
-      console.log(res);
-    });        
+    // let video_id = "jYvkMv7LzCw";
+    // this.http.get("http://www.youtube.com/oembed?url=https://www.youtube.com/watch?v="
+    //   + video_id + "&format=json").subscribe(res => {
+    //     console.log(res);
+    //   });
+
+    this.testConnection();    
   }
 
+
+  testConnection() {
+    this.http.get(this.rootURL + '/' + this.videosController)
+    .toPromise().then(res => {
+      console.log('Connection established! =)');
+      console.log(res);
+    }).catch((error) => {
+      console.log(error);
+    });
+  }
 
   existsVideo(id: string) {
     return true;
   }
 
   refreshList() {
-    this.http.get(this.rootURL + '/Video')
+    this.http.get(this.rootURL + '/' + this.videosController)
       .subscribe(res => this.videoList = res as Video[]);
   }
 
   addVideo(video: Video) {
-    return this.http.post(this.rootURL + '/Video', video)
+    return this.http.post(this.rootURL + '/' + this.videosController, video)
       .subscribe(res => {
         this.videoList.push(res as Video)
         this.refreshList();
@@ -43,7 +57,7 @@ export class VideoService {
   }
 
   removeVideo(url: string) {
-    return this.http.delete(this.rootURL + '/Video/' + url);
+    return this.http.delete(this.rootURL + '/' + this.videosController + '/' + url);
   }
 
   showLastVideos() {

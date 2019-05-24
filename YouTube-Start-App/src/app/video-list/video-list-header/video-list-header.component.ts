@@ -17,13 +17,13 @@ import { ToolsService } from 'src/app/shared/tools.service';
 export class VideoListHeaderComponent implements OnInit {
 
   constructor(
-    private service: VideoService,
+    private videoService: VideoService,    
     private modalService: NgbModal,
     private net: ToolsService
   ) { }
 
   ngOnInit() {
-    this.service.refreshList();
+    this.videoService.refreshList();
   }
 
   openFormModal() {
@@ -32,11 +32,11 @@ export class VideoListHeaderComponent implements OnInit {
       let video = new Video()
       let params = this.net.getParamsURL(res.url);
       video.id = this.net.getValueByKeyFromURL(params, "v");
-      if (!this.service.existsVideo(video.id)) {
+      if (!this.videoService.existsVideo(video.id)) {
         throw 'url ( ' + video.id + ' ) doen`t exists';
       }
       video.postedDate = new Date();
-      this.service.addVideo(video);
+      this.videoService.addVideo(video);
     }).catch((error) => {
       console.log(error);
     });
