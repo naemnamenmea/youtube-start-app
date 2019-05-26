@@ -19,6 +19,11 @@ export class FormModalNewVideoComponent implements OnInit {
     private formBuilder: FormBuilder,
     private service: VideoService
   ) {
+<<<<<<< HEAD
+
+=======
+    
+>>>>>>> 9c232564b620e1c3514a4621738223eeb3d9cb25
     this.createForm();
   }
 

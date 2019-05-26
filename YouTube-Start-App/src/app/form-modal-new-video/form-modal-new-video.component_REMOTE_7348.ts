@@ -19,6 +19,7 @@ export class FormModalNewVideoComponent implements OnInit {
     private formBuilder: FormBuilder,
     private service: VideoService
   ) {
+    
     this.createForm();
   }
 
@@ -34,13 +35,9 @@ export class FormModalNewVideoComponent implements OnInit {
   }
   
   private submitForm() {
-	//this.service.addVideo(this.myForm);
     this.activeModal.close(this.myForm.value);
   }
 
- insertRecord() {
-    
-  }
   closeModal() {
     this.activeModal.close('Modal Closed');
   }  

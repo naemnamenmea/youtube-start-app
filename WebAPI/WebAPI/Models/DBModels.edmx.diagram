@@ -5,7 +5,8 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="9e1b9bd884e343fd8d57f0c77c448aa2" Name="Diagram1">
-        <EntityTypeShape EntityType="kontrolskij_a_task_0105Model.video" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="kontrolskij_a_task_0105Model.user" Width="1.5" PointX="5.25" PointY="0.875" />
+        <EntityTypeShape EntityType="kontrolskij_a_task_0105Model.video" Width="1.5" PointX="0.75" PointY="0.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

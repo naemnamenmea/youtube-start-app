@@ -12,11 +12,10 @@ namespace WebAPI.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class video
+    public partial class user
     {
-        public string id { get; set; }
-        public string title { get; set; }
-        public Nullable<System.DateTime> postedDate { get; set; }
-        public Nullable<float> avScore { get; set; }
+        public int id { get; set; }
+        public string password { get; set; }
+        public string name { get; set; }
     }
 }

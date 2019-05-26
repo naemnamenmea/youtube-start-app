@@ -1,5 +1,5 @@
 export class Video {
-    url : string;
+    id : string;
     title: string;
     postedDate: Date;
     avScore: number;

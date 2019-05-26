@@ -1,32 +1,41 @@
+import { CommonModule, DatePipe } from '@angular/common';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+ import { ToastrModule } from 'ngx-toastr';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-
 import { AppComponent } from './app.component';
-import { VideoComponent } from './videos/video/video.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { VideoListComponent } from './videos/video-list/video-list.component';
-import { VideosComponent } from './videos/videos.component';
+import { VideoListComponent } from './video-list/video-list.component';
 import { HttpClientModule } from '@angular/common/http';
 import { FormModalNewVideoComponent } from './form-modal-new-video/form-modal-new-video.component';
+import { VideoListHeaderComponent } from './video-list/video-list-header/video-list-header.component'
+import { VideoListBodyComponent } from './video-list/video-list-body/video-list-body.component'
+import { EmbedVideo } from 'ngx-embed-video';
 
 @NgModule({
   declarations: [
     AppComponent,
-    VideoComponent,
     VideoListComponent,
-    VideosComponent,
+    VideoListBodyComponent,
+    VideoListHeaderComponent,
     FormModalNewVideoComponent
   ],
   imports: [
     FormsModule,
-    ReactiveFormsModule,
+    ReactiveFormsModule,    
     BrowserModule,
     HttpClientModule,
-    NgbModule.forRoot()
+    CommonModule,
+    BrowserAnimationsModule,
+    ToastrModule.forRoot(),
+    NgbModule.forRoot(),
+    EmbedVideo.forRoot()
   ],
-  providers: [],
-  bootstrap: [AppComponent],
+  providers: [
+    DatePipe
+  ],
+ bootstrap: [AppComponent],
   entryComponents: [
     FormModalNewVideoComponent
   ]
