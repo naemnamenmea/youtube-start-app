@@ -1,11 +1,13 @@
-<table class="table table-hover">
+<table class="table table-hover video-list mx-auto">
   <tr *ngFor="let video of service.videoList">
     <td class="container-fluid d-flex video-container">
-      <div class="video-box" [innerHtml]="service.getVideoById(video.id)"></div>
+      <img class="video-thumbnail" [src]="video.thumbnail" alt="">
       <div class="d-flex flex-wrap video-info bg-light align-content-between w-100">
         <div class="d-flex justify-content-between w-100 m-2">
-          <span class="title">{{video.title}}</span>
-          <button class="icon remove btn" (click)="removeVideo(video.id)">&times;</button>
+          <span class="title">{{video.title}}</span>         
+          <button class="icon remove btn" (click)="removeVideo(video.id)">
+              <img src="../../../assets/img/x-button.svg" alt="">          
+          </button>           
         </div>
         <div class="d-flex justify-content-between w-100 m-2">
           <span class="load-date">{{datepipe.transform(video.postedDate, 'yyyy-MM-dd')}}</span>

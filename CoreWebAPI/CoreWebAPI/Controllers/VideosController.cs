@@ -1,11 +1,18 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
+using System.Runtime.Serialization.Json;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using CoreWebAPI.Models;
+using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using AutoMapper;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -17,9 +24,10 @@ namespace CoreWebAPI.Controllers
     [ApiController]
     public class VideosController : Controller
     {
-        private readonly VideoContext _context;
+        private readonly VideoService _context;
+        private NoEmbedService noembedService;
 
-        public VideosController(VideoContext context)
+        public VideosController(VideoService context)
         {
             _context = context;
 
@@ -29,15 +37,15 @@ namespace CoreWebAPI.Controllers
                 {
                     id = "l58dipKGTJE",
                     title = "animal",
-                    postedDate = new DateTime(),
-                    avScore = 0.3f
+                    posted_date = new DateTime(),
+                    grade = 0.3f
                 });
                 _context.VideoItems.Add(new Video
                 {
                     id = "LEHny_pGtL0",
                     title = "pain",
-                    postedDate = new DateTime(),
-                    avScore = 0.7f
+                    posted_date = new DateTime(),
+                    grade = 0.7f
                 });
                 _context.SaveChanges();
             }
@@ -71,8 +79,9 @@ namespace CoreWebAPI.Controllers
 
         // POST api/Videos
         [HttpPost]
-        public async Task<ActionResult<Video>> Post(Video video)
+        public async Task<ActionResult<Video>> Post(string videoId)
         {
+            Video video = Mapper.Map<Video>(await noembedService.GetYouTubeVideoJSON(videoId));
             _context.VideoItems.Add(video);
             await _context.SaveChangesAsync();
 

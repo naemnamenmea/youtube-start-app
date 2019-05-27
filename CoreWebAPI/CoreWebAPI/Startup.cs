@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using CoreWebAPI.Models;
+using CoreWebAPI.Services;
 
 namespace CoreWebAPI
 {
@@ -27,7 +29,7 @@ namespace CoreWebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddDbContext<VideoContext>(opt => opt.UseInMemoryDatabase("VideoList"));
-            services.AddDbContext<VideoContext>(opt =>
+            services.AddDbContext<VideoService>(opt =>
                 opt.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors(options =>
@@ -41,7 +43,8 @@ namespace CoreWebAPI
                     .AllowCredentials()
                     .AllowAnyMethod();
                 });
-            });            
+            });
+            services.AddHttpClient<NoEmbedService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

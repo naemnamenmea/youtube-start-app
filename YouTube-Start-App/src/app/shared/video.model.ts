@@ -1,6 +1,7 @@
 export class Video {
     id : string;
     title: string;
-    postedDate: Date;
-    avScore: number;
+    posted_date: Date;
+    grade: number;
+    thumbnail: string;
 }

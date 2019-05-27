@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Video } from './video.model';
-import { HttpClient } from '@angular/common/http';
-import { EmbedVideoService } from 'ngx-embed-video';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +11,12 @@ export class VideoService {
   video: Video;
   videoList: Video[];
   readonly youtubeURL = 'https://www.youtube.com';
-  readonly rootURL = 'http://localhost:58965/api';
-  // readonly rootURL = 'https://localhost:44326/api';
+  // readonly rootURL = 'http://localhost:58965/api';
+  readonly rootURL = 'https://localhost:44326/api';
   readonly videosController = 'videos';
 
   constructor(
-    private http: HttpClient,
-    private embedService: EmbedVideoService
+    private http: HttpClient
   ) {
     // let video_id = "jYvkMv7LzCw";
     // this.http.get("http://www.youtube.com/oembed?url=https://www.youtube.com/watch?v="
@@ -25,18 +24,18 @@ export class VideoService {
     //     console.log(res);
     //   });
 
-    this.testConnection();    
+    this.testConnection();
   }
 
 
   testConnection() {
     this.http.get(this.rootURL + '/' + this.videosController)
-    .toPromise().then(res => {
-      console.log('Connection established! =)');
-      console.log(res);
-    }).catch((error) => {
-      console.log(error);
-    });
+      .toPromise().then(res => {
+        console.log('Connection established! =)');
+        console.log(res);
+      }).catch((error) => {
+        console.log(error);
+      });
   }
 
   existsVideo(id: string) {
@@ -48,12 +47,8 @@ export class VideoService {
       .subscribe(res => this.videoList = res as Video[]);
   }
 
-  addVideo(video: Video) {
-    return this.http.post(this.rootURL + '/' + this.videosController, video)
-      .subscribe(res => {
-        this.videoList.push(res as Video)
-        this.refreshList();
-      });
+  addVideo(videoId: string) {
+    return this.http.post(this.rootURL + '/' + this.videosController, videoId);
   }
 
   removeVideo(url: string) {
@@ -64,19 +59,24 @@ export class VideoService {
 
   }
 
-  getVideoById(videoId: string) {
-    let url = 'https://www.youtube.com/watch?v=' + videoId;
-    let res = this.embedService.embed(url, {
-      query: {},
-      attr: { width: '100%', height: '100%' }
-    });
-    //console.log(res);
-    // let http : HttpClient;
-    // console.log(http.get('https://www.youtube.com/channel/UCSJbGtTlrDami-tDGPUV9-w?feature=embeds_subscribe_title'));
-    return res;
-  }
-
   top(num: number = 10) {
 
+  }
+
+  getVideoById(videoId: string) {
+    let url = 'https://noembed.com/embed?url=https://www.youtube.com/watch?v=' + videoId;
+    // const httpOptions = {     
+    //   responseType: 'json',       
+    //   headers: new HttpHeaders({        
+    //     'Content-Type': 'application/json',
+    //     'Authorization': 'my-auth-token'
+    //   })
+    // };
+    // return this.http.get(url, httpOptions);
+    return this.http.get(url, {responseType: 'json',       headers: new HttpHeaders({        
+      'Content-Type': 'application/json',
+      'Authorization': 'my-auth-token',
+      'Access-Control-Allow-Headers': 'access-control-allow-origin'
+    })});
   }
 }

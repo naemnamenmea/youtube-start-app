@@ -1,21 +1,20 @@
-﻿using Microsoft.EntityFrameworkCore;
-using MySql.Data.MySqlClient;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using CoreWebAPI.Services;
+using Microsoft.EntityFrameworkCore;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace CoreWebAPI.Models
 {
-    public class VideoContext : DbContext
+    public class VideoService : DbContext
     {
-        public VideoContext(DbContextOptions<VideoContext> options)
+        public readonly NoEmbedService _noembedService;
+
+        public VideoService(DbContextOptions<VideoService> options)
             : base(options)
         {
         }
 
         public DbSet<Video> VideoItems { get; set; }
-
 
         //public string ConnectionString { get; set; }
 
@@ -28,6 +27,6 @@ namespace CoreWebAPI.Models
         //{
         //    return new MySqlConnection(ConnectionString);
         //}
-        
+
     }
 }

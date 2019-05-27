@@ -1,19 +1,22 @@
-$btn-remove-size: 50px;
+$btn-remove-size: 60px;
 $video-box-size: 300px;
+$shift-on-hover: 2px;
 
 button.remove {
-    font-size: 40px;
-    line-height: 15px;
-    background-color: #CF2D00;
-    color: white;
-    border: none;
     padding: 0;
-    border-radius: 25%;
+    box-shadow: none;
     width: $btn-remove-size;
     height: $btn-remove-size;
+
+    &:hover {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        position: relative;
+        right: -$shift-on-hover;
+        bottom: -$shift-on-hover;
+    }
 }
 
-.video-box {
+.video-thumbnail {
     background-color: #989898;
     width: $video-box-size;
 }
@@ -24,4 +27,8 @@ button.remove {
 
 .video-info {
     min-width: 300px;
+}
+
+.video-list {
+    max-width: 1000px;
 }

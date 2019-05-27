@@ -17,7 +17,7 @@ import { ToolsService } from 'src/app/shared/tools.service';
 export class VideoListHeaderComponent implements OnInit {
 
   constructor(
-    private videoService: VideoService,    
+    private videoService: VideoService,
     private modalService: NgbModal,
     private net: ToolsService
   ) { }
@@ -29,16 +29,32 @@ export class VideoListHeaderComponent implements OnInit {
   openFormModal() {
     const modalRef = this.modalService.open(FormModalNewVideoComponent);
     modalRef.result.then((res: any) => {
-      let video = new Video()
       let params = this.net.getParamsURL(res.url);
-      video.id = this.net.getValueByKeyFromURL(params, "v");
-      if (!this.videoService.existsVideo(video.id)) {
-        throw 'url ( ' + video.id + ' ) doen`t exists';
-      }
-      video.postedDate = new Date();
-      this.videoService.addVideo(video);
+      let videoId = this.net.getValueByKeyFromURL(params, "v");
+      this.videoService.addVideo(videoId).
+        subscribe(res => {
+          this.videoService.refreshList();
+        });
+      // this.videoService.getVideoById(videoId).toPromise().then(videoJSON => {        
+      //   if (videoJSON.hasOwnProperty('error')) {
+      //     throw 'Такого видео не существует.';
+      //   }
+      //   let video = {
+      //     id: videoId,
+      //     posted_date : new Date(),
+      //     title : videoJSON['title'],
+      //     thumbnail : videoJSON['thumbnail']
+      //   } as Video;
+      //   this.videoService.addVideo(video);
+      // }).catch(error => {
+      //   console.log(error);
+      // });
     }).catch((error) => {
-      console.log(error);
+      console.log('Возникли проблемы с закрытием модального окна. Ошибка: ', error);
     });
   }
 }
+
+// "thumbnail_url": "https://i.ytimg.com/vi/cS0NScCcFSY/hqdefault.jpg",
+// "title": "Connect mysql with ASP.NET Core",
+// "html": "\n<iframe width=\" 480\" height=\"270\" src=\"https://www.youtube.com/embed/cS0NScCcFSY?feature=oembed\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe>\n",
