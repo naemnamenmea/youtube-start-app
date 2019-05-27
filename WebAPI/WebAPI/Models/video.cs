@@ -16,7 +16,7 @@ namespace WebAPI.Models
     {
         public string id { get; set; }
         public string title { get; set; }
-        public Nullable<System.DateTime> postedDate { get; set; }
-        public Nullable<float> avScore { get; set; }
+        public Nullable<System.DateTime> posted_date { get; set; }
+        public Nullable<float> grade { get; set; }
     }
 }

@@ -13,7 +13,7 @@ export class FormModalNewVideoComponent implements OnInit {
   @Input() myForm: FormGroup;
   //@Input() url: String;
   //@Input() title: String;
-
+ 
   constructor(
     public activeModal: NgbActiveModal,
     private formBuilder: FormBuilder,

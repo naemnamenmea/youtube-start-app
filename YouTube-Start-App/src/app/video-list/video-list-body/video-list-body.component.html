@@ -1,15 +1,15 @@
 <table class="table table-hover">
   <tr *ngFor="let video of service.videoList">
     <td class="container-fluid d-flex video-container">
-      <div class="video-box" [innerHtml]="service.getVideoById(video.id)"></div>
+      <img src="https://img.youtube.com/vi/43DP2Lx-YQI/0.jpg" alt="">
       <div class="d-flex flex-wrap video-info bg-light align-content-between w-100">
         <div class="d-flex justify-content-between w-100 m-2">
           <span class="title">{{video.title}}</span>
           <button class="icon remove btn" (click)="removeVideo(video.id)">&times;</button>
         </div>
         <div class="d-flex justify-content-between w-100 m-2">
-          <span class="load-date">{{datepipe.transform(video.postedDate, 'yyyy-MM-dd')}}</span>
-          <div class="score">{{video.avScore}}</div>
+          <span class="load-date">{{datepipe.transform(video.posted_date, 'yyyy-MM-dd')}}</span>
+          <div class="score">{{video.grade}}</div>
         </div>
       </div>
     </td>

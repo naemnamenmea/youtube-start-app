@@ -29,13 +29,19 @@ export class VideoListHeaderComponent implements OnInit {
   openFormModal() {
     const modalRef = this.modalService.open(FormModalNewVideoComponent);
     modalRef.result.then((res: any) => {
+      // console.log(this.net.getValueByKeyFromURL(res.url,'v'));
+      // this.videoService.getVideo(this.net.getValueByKeyFromURL(res.url,'v'))
+      // .toPromise().then(video => {
+      //   console.log(video.title);
+      // });
+      
       let video = new Video()
       let params = this.net.getParamsURL(res.url);
       video.id = this.net.getValueByKeyFromURL(params, "v");
       if (!this.videoService.existsVideo(video.id)) {
         throw 'url ( ' + video.id + ' ) doen`t exists';
       }
-      video.postedDate = new Date();
+      video.posted_date = new Date();
       this.videoService.addVideo(video);
     }).catch((error) => {
       console.log(error);

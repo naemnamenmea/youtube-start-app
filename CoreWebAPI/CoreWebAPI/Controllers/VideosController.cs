@@ -23,21 +23,21 @@ namespace CoreWebAPI.Controllers
         {
             _context = context;
 
-            if (_context.VideoItems.Count() == 0)
+            if (_context.Videos.Count() == 0)
             {
-                _context.VideoItems.Add(new Video
+                _context.Videos.Add(new Video
                 {
                     id = "l58dipKGTJE",
                     title = "animal",
-                    postedDate = new DateTime(),
-                    avScore = 0.3f
+                    posted_date = new DateTime(),
+                    grade = 0.3f
                 });
-                _context.VideoItems.Add(new Video
+                _context.Videos.Add(new Video
                 {
                     id = "LEHny_pGtL0",
                     title = "pain",
-                    postedDate = new DateTime(),
-                    avScore = 0.7f
+                    posted_date = new DateTime(),
+                    grade = 0.7f
                 });
                 _context.SaveChanges();
             }
@@ -45,21 +45,16 @@ namespace CoreWebAPI.Controllers
 
         // GET: api/Videos
         [HttpGet]
-        public IEnumerable<Video> Get()
+        public async Task<ActionResult<IEnumerable<Video>>> Get()
         {
-            return _context.VideoItems;
+            return await _context.Videos.ToListAsync();
         }
-        //public async Task<ActionResult<IEnumerable<Video>>> Get()
-        //{            
-        //    Debug.WriteLine("It works!!!");
-        //    return await _context.VideoItems.ToListAsync();
-        //}
 
         // GET api/Videos/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Video>> Get(long id)
         {
-            var videoItem = await _context.VideoItems.FindAsync(id);
+            var videoItem = await _context.Videos.FindAsync(id);
 
             if (videoItem == null)
             {
@@ -73,7 +68,7 @@ namespace CoreWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Video>> Post(Video video)
         {
-            _context.VideoItems.Add(video);
+            _context.Videos.Add(video);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction(nameof(Get), new { id = video.id }, video);
@@ -98,14 +93,14 @@ namespace CoreWebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(long id)
         {
-            var video = await _context.VideoItems.FindAsync(id);
+            var video = await _context.Videos.FindAsync(id);
 
             if (video == null)
             {
                 return NotFound();
             }
 
-            _context.VideoItems.Remove(video);
+            _context.Videos.Remove(video);
             await _context.SaveChangesAsync();
 
             return NoContent();

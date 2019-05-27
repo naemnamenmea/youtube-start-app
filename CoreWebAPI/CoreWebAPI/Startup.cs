@@ -28,7 +28,7 @@ namespace CoreWebAPI
         {
             //services.AddDbContext<VideoContext>(opt => opt.UseInMemoryDatabase("VideoList"));
             services.AddDbContext<VideoContext>(opt =>
-                opt.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+                opt.UseMySQL(Configuration.GetConnectionString("HomeConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors(options =>
             {
