@@ -26,16 +26,19 @@ export class VideoService {
 
     this.testConnection();
   }
-
+  
+  getVideo(videoId: string) {
+    return this.http.get("https://noembed.com/embed?url=https://www.youtube.com/watch?v=" + videoId);
+  }
 
   testConnection() {
     this.http.get(this.rootURL + '/' + this.videosController)
-      .toPromise().then(res => {
-        console.log('Connection established! =)');
-        console.log(res);
-      }).catch((error) => {
-        console.log(error);
-      });
+    .toPromise().then(res => {
+      console.log('SUCCESS: Connection established!');
+      console.log(res);
+    }).catch((error) => {
+      console.log(error);
+    });
   }
 
   existsVideo(id: string) {
