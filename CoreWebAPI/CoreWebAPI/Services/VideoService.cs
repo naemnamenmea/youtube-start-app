@@ -14,7 +14,7 @@ namespace CoreWebAPI.Models
         {
         }
 
-        public DbSet<Video> Videos { get; set; }
+        public DbSet<Video> VideoItems { get; set; }
 
         //public string ConnectionString { get; set; }
 

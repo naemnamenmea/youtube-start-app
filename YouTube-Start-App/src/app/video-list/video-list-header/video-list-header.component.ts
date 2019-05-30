@@ -31,6 +31,7 @@ export class VideoListHeaderComponent implements OnInit {
     modalRef.result.then((res: any) => {
       let params = this.net.getParamsURL(res.url);
       let videoId = this.net.getValueByKeyFromURL(params, "v");
+      console.log('Modal form:( trying to add video with id=\"'+videoId+'\" )');
       this.videoService.addVideo(videoId).
         subscribe(res => {
           this.videoService.refreshList();

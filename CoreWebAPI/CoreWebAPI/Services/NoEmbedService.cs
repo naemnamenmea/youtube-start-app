@@ -25,15 +25,14 @@ namespace CoreWebAPI.Services
             Client = client;
         }
 
-        public async Task<JsonResult> GetYouTubeVideoJSON(string videoId)
+        public async Task<JObject> GetYouTubeVideoJSON(string videoId)
         {
             var response = await Client.GetAsync(
                 "embed?url=https://www.youtube.com/watch?v=" + videoId);
 
             response.EnsureSuccessStatusCode();
 
-            var resault = await response.Content
-                .ReadAsAsync<JsonResult>();
+            JObject resault = JObject.Parse(await response.Content.ReadAsStringAsync());            
 
             return resault;
         }

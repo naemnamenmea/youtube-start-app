@@ -29,8 +29,8 @@ namespace CoreWebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddDbContext<VideoContext>(opt => opt.UseInMemoryDatabase("VideoList"));
-            services.AddDbContext<VideoContext>(opt =>
-                opt.UseMySQL(Configuration.GetConnectionString("HomeConnection")));
+            services.AddDbContext<VideoService>(opt =>
+                opt.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors(options =>
             {
@@ -59,9 +59,9 @@ namespace CoreWebAPI
                 app.UseHsts();
             }
 
+            app.UseCors();
             app.UseHttpsRedirection();
             app.UseMvc();
-            app.UseCors();
         }
     }
 }

@@ -51,7 +51,7 @@ export class VideoService {
   }
 
   addVideo(videoId: string) {
-    return this.http.post(this.rootURL + '/' + this.videosController, videoId);
+    return this.http.post(this.rootURL + '/' + this.videosController + "?videoId=" + videoId, null);
   }
 
   removeVideo(url: string) {
@@ -63,7 +63,7 @@ export class VideoService {
   }
 
   top(num: number = 10) {
-
+    this.refreshList();
   }
 
   getVideoById(videoId: string) {
