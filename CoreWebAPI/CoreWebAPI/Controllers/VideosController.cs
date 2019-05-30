@@ -1,20 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Http;
-using System.Runtime.Serialization.Json;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using CoreWebAPI.Models;
 using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using AutoMapper;
-using System.Net;
-using System.IO;
 using Microsoft.Extensions.Logging;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -43,25 +34,6 @@ namespace CoreWebAPI.Controllers
             _context = context;
             noembedService = noembed;
             _logger = logger;
-
-            if (_context.VideoItems.Count() == 0)
-            {
-                _context.VideoItems.Add(new Video
-                {
-                    id = "l58dipKGTJE",
-                    title = "animal",
-                    posted_date = new DateTime(),
-                    grade = 0.3f
-                });
-                _context.VideoItems.Add(new Video
-                {
-                    id = "LEHny_pGtL0",
-                    title = "pain",
-                    posted_date = new DateTime(),
-                    grade = 0.7f
-                });
-                _context.SaveChanges();
-            }
         }
 
         // GET: api/Videos
@@ -73,7 +45,7 @@ namespace CoreWebAPI.Controllers
 
         // GET api/Videos/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Video>> Get([FromRoute] long id)
+        public async Task<ActionResult<Video>> Get([FromRoute] string id)
         {
             var videoItem = await _context.VideoItems.FindAsync(id);
 
@@ -89,10 +61,19 @@ namespace CoreWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Video>> Post(string videoId) //async Task<ActionResult<
         {
-            _logger.LogInformation(CreateLogMsg(ref videoId));
+            //_logger.LogInformation(CreateLogMsg(ref videoId));
 
             //Video video = Mapper.Map<Video>(noembedService.GetYouTubeVideoJSON(videoId));
+
+            var item = await _context.VideoItems.FindAsync(videoId);
+            if (item != null)
+                return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status409Conflict);
+
             var data = await noembedService.GetYouTubeVideoJSON(videoId);
+            if(data.ContainsKey("error"))
+            {
+                return NotFound();
+            }
             Video video = new Video
             {
                 id = videoId,
@@ -101,9 +82,7 @@ namespace CoreWebAPI.Controllers
             };
 
             _context.VideoItems.Add(video);
-            _context.SaveChangesAsync();
-            //Video video = new Video();
-
+            await _context.SaveChangesAsync();
             
             return CreatedAtAction(nameof(Get), new { id = video.id }, video);
         }

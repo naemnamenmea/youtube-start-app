@@ -23,7 +23,7 @@ export class VideoListBodyComponent implements OnInit {
   removeVideo(url: string) {    
     if (confirm("Вы действительно хотите удалить данный материал?")) {
       this.service.removeVideo(url).subscribe(res => {
-        this.toastr.warning('Delete successfully', 'Video DB')
+        this.toastr.warning('Delete successfully', 'Trying to delete video...')
         this.service.refreshList();
       });
     }

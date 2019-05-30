@@ -1,6 +1,6 @@
 $btn-remove-size: 60px;
 $video-box-size: 300px;
-$shift-on-hover: 2px;
+$shift-on-hover: 1px;
 
 button.remove {
     padding: 0;
@@ -19,6 +19,9 @@ button.remove {
 .video-thumbnail {
     background-color: #989898;
     width: $video-box-size;
+    &:hover {
+        opacity: 0.5;
+    }
 }
 
 .video-container {

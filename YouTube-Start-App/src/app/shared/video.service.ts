@@ -31,6 +31,10 @@ export class VideoService {
     return this.http.get("https://noembed.com/embed?url=https://www.youtube.com/watch?v=" + videoId);
   }
 
+  getTitle(videoId: string) {
+    return this.http.get(this.rootURL + '/' + this.videosController+ '/title' + "?videoId=" + videoId, null);
+  }
+
   testConnection() {
     this.http.get(this.rootURL + '/' + this.videosController)
     .toPromise().then(res => {
@@ -54,8 +58,8 @@ export class VideoService {
     return this.http.post(this.rootURL + '/' + this.videosController + "?videoId=" + videoId, null);
   }
 
-  removeVideo(url: string) {
-    return this.http.delete(this.rootURL + '/' + this.videosController + '/' + url);
+  removeVideo(videoId: string) {
+    return this.http.delete(this.rootURL + '/' + this.videosController + '/' + videoId);
   }
 
   showLastVideos() {

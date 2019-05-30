@@ -1,5 +1,5 @@
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { VideoService } from 'src/app/shared/video.service';
 import { FormModalNewVideoComponent } from '../../form-modal-new-video/form-modal-new-video.component';
 import { Video } from '../../shared/video.model';
@@ -7,6 +7,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
 import { ToolsService } from 'src/app/shared/tools.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-video-list-header',
@@ -19,8 +20,10 @@ export class VideoListHeaderComponent implements OnInit {
   constructor(
     private videoService: VideoService,
     private modalService: NgbModal,
-    private net: ToolsService
-  ) { }
+    private toastr: ToastrService,
+    private net: ToolsService,
+
+  ) {}
 
   ngOnInit() {
     this.videoService.refreshList();
@@ -31,27 +34,20 @@ export class VideoListHeaderComponent implements OnInit {
     modalRef.result.then((res: any) => {
       let params = this.net.getParamsURL(res.url);
       let videoId = this.net.getValueByKeyFromURL(params, "v");
-      console.log('Modal form:( trying to add video with id=\"'+videoId+'\" )');
       this.videoService.addVideo(videoId).
-        subscribe(res => {
+        toPromise().then(res => {
           this.videoService.refreshList();
+        }).catch(err => {
+          let error_msg = 'Unknown error';
+          if(err.status == 409) {
+            error_msg = 'Video already exists';
+          } else if(err.status = 404) {
+            error_msg = 'Video not found';
+          }
+          this.toastr.warning(error_msg, 'Trying to add new video...')
         });
-      // this.videoService.getVideoById(videoId).toPromise().then(videoJSON => {        
-      //   if (videoJSON.hasOwnProperty('error')) {
-      //     throw 'Такого видео не существует.';
-      //   }
-      //   let video = {
-      //     id: videoId,
-      //     posted_date : new Date(),
-      //     title : videoJSON['title'],
-      //     thumbnail : videoJSON['thumbnail']
-      //   } as Video;
-      //   this.videoService.addVideo(video);
-      // }).catch(error => {
-      //   console.log(error);
-      // });
-    }).catch((error) => {
-      console.log('Возникли проблемы с закрытием модального окна. Ошибка: ', error);
+    }, (reason) => {}).catch((error) => {
+      this.toastr.warning('Wrong url', 'Trying to add new video...')
     });
   }
 }
