@@ -46,7 +46,9 @@ export class FormModalNewVideoComponent implements OnInit {
           })
           .catch(err => { });
       }
-    } catch (err) { }
+    } catch (err) { 
+      this.myForm.patchValue({title:''});
+    }
 
     setTimeout(() => {
       let url = this.net.getParamsURL(this.myForm.get('url').value);

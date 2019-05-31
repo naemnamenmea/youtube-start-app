@@ -11,7 +11,12 @@
         </div>
         <div class="d-flex justify-content-between w-100 m-2">
           <span class="load-date">{{datepipe.transform(video.posted_date, 'yyyy-MM-dd')}}</span>
-          <div class="score">{{video.grade}}</div>
+
+          <ng-template #t let-fill="fill">
+            <span class="star" [class.full]="fill === 100">&#9733;</span>
+          </ng-template>
+
+          <ngb-rating class="rating_panel" [(rate)]="video.grade" [max]=5 [starTemplate]="t"></ngb-rating>
         </div>
       </div>
     </td>

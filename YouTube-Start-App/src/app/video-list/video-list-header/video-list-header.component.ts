@@ -21,8 +21,7 @@ export class VideoListHeaderComponent implements OnInit {
     private videoService: VideoService,
     private modalService: NgbModal,
     private toastr: ToastrService,
-    private net: ToolsService,
-
+    private net: ToolsService
   ) {}
 
   ngOnInit() {

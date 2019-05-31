@@ -35,3 +35,22 @@ button.remove {
 .video-list {
     max-width: 1000px;
 }
+
+//-----------------------------
+
+.star {
+    position: relative;
+    display: inline-block;
+    font-size: 3rem;
+    color: #d3d3d3;
+    &::selection {
+        background: none;
+    }
+  }
+  .full {
+    color: yellow;
+  }
+
+  .rating_panel {
+      outline: none;      
+  }
