@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, FormControl, Validators, NgForm } from '@angula
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { VideoService } from '../shared/video.service';
 import { ToolsService } from '../shared/tools.service';
+import { invalid } from '@angular/compiler/src/render3/view/util';
 
 @Component({
   selector: 'app-form-modal-new-video',
@@ -13,6 +14,7 @@ export class FormModalNewVideoComponent implements OnInit {
 
   @Input() myForm: FormGroup;
   typing: boolean;
+  currentUrl: string;
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -27,26 +29,38 @@ export class FormModalNewVideoComponent implements OnInit {
 
   }
 
-  trySetVideoTitle() {
+  // https://www.youtube.com/watch?v=EtH9Yllzjcc
+  // https://www.youtube.com/watch?v=SXJEEqgaYWs
+
+  trySetVideoTitle(delay: number) {
     try {
-      let params = this.net.getParamsURL(this.myForm.get('url').value);
-      let videoId = this.net.getValueByKeyFromURL(params, "v");
-      this.service.getTitle(videoId).
-        toPromise().then((titleValue) => {
-          this.myForm.patchValue({ title: titleValue });
-        })
-        .catch(err => { });
-    } catch (err) {}
+      let url = this.net.getParamsURL(this.myForm.get('url').value);
+      if (url != this.currentUrl) {
+        this.currentUrl = url;
+        let videoId = this.net.getValueByKeyFromURL(url, "v");
+        if (videoId.length != 11)
+          throw 'invalid id';
+        this.service.getTitle(videoId).
+          toPromise().then((titleValue: string) => {
+            this.myForm.patchValue({ title: titleValue });
+          })
+          .catch(err => { });
+      }
+    } catch (err) { }
 
     setTimeout(() => {
+      let url = this.net.getParamsURL(this.myForm.get('url').value);
+      if(url != this.currentUrl) {
+        this.trySetVideoTitle(0);
+      }
       this.typing = false;
-    }, 822);
+    }, delay);
   }
 
   tryVideoTitle() {
     if (!this.typing) {
       this.typing = true;
-      this.trySetVideoTitle();
+      this.trySetVideoTitle(822);
     }
   }
 

@@ -14,6 +14,7 @@ export class VideoService {
   // readonly rootURL = 'http://localhost:58965/api';
   readonly rootURL = 'https://localhost:44326/api';
   readonly videosController = 'videos';
+  readonly titleAction = 'gettitle';
 
   constructor(
     private http: HttpClient
@@ -27,12 +28,12 @@ export class VideoService {
     this.testConnection();
   }
   
-  getVideo(videoId: string) {
-    return this.http.get("https://noembed.com/embed?url=https://www.youtube.com/watch?v=" + videoId);
-  }
+  // getVideo(videoId: string) {
+  //   return this.http.get("https://noembed.com/embed?url=https://www.youtube.com/watch?v=" + videoId);
+  // }
 
   getTitle(videoId: string) {
-    return this.http.get(this.rootURL + '/' + this.videosController+ '/title' + "?videoId=" + videoId, null);
+    return this.http.get(this.rootURL + '/' + this.videosController+ '/' + this.titleAction + "/" + videoId);
   }
 
   testConnection() {
