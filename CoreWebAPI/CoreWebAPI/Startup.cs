@@ -14,6 +14,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using CoreWebAPI.Models;
 using CoreWebAPI.Services;
+using AutoMapper;
 
 namespace CoreWebAPI
 {
@@ -30,7 +31,7 @@ namespace CoreWebAPI
         {
             //services.AddDbContext<VideoContext>(opt => opt.UseInMemoryDatabase("VideoList"));
             services.AddDbContext<VideoService>(opt =>
-                opt.UseMySQL(Configuration.GetConnectionString("HomeConnection")));
+                opt.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors(options =>
             {
@@ -45,6 +46,12 @@ namespace CoreWebAPI
                 });
             });
             services.AddHttpClient<NoEmbedService>();
+
+            var mappingConfig = new MapperConfiguration(mc => {
+                mc.AddProfile(new MappingProfile());
+            });
+            IMapper mapper = mappingConfig.CreateMapper();
+            services.AddSingleton(mapper);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using AutoMapper;
 using CoreWebAPI.Models;
 using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,20 +22,34 @@ namespace CoreWebAPI.Controllers
     {
         private readonly VideoService _context;
         private readonly ILogger _logger;
+        private readonly IMapper _mapper;
         private NoEmbedService noembedService;
 
-        private string CreateLogMsg(ref string msg)
+        private string CreateLogMsg(string msg)
         {
             DateTime current_time = DateTime.Now;
             return ":::::(" + current_time + "):::::> \"" + msg + "\"";
         }
 
         public VideosController(VideoService context,
-            ILogger<VideosController> logger, NoEmbedService noembed)
+            ILogger<VideosController> logger, NoEmbedService noembed, IMapper mapper)
         {
             _context = context;
             noembedService = noembed;
             _logger = logger;
+            _mapper = mapper;
+        }
+
+        [Route("[action]/{id}")]
+        [HttpGet]
+        public async Task<ActionResult<string>> GetTitle([FromRoute] string id)
+        {
+            var data = await noembedService.GetYouTubeVideoJSON(id);
+
+            if (data.ContainsKey("error"))
+                return NoContent();
+
+            return data["title"].ToString();
         }
 
         // GET: api/Videos
@@ -61,7 +77,6 @@ namespace CoreWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Video>> Post(string videoId) //async Task<ActionResult<
         {
-            //_logger.LogInformation(CreateLogMsg(ref videoId));
 
             //Video video = Mapper.Map<Video>(noembedService.GetYouTubeVideoJSON(videoId));
 
@@ -70,10 +85,13 @@ namespace CoreWebAPI.Controllers
                 return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status409Conflict);
 
             var data = await noembedService.GetYouTubeVideoJSON(videoId);
-            if(data.ContainsKey("error"))
+            if (data.ContainsKey("error"))
             {
                 return NotFound();
             }
+
+            //Video video = JsonConvert.DeserializeObject<Video>(data);
+
             Video video = new Video
             {
                 id = videoId,

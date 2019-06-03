@@ -32,9 +32,10 @@ namespace CoreWebAPI.Services
 
             response.EnsureSuccessStatusCode();
 
-            JObject resault = JObject.Parse(await response.Content.ReadAsStringAsync());            
-
+            //return await response.Content.ReadAsStringAsync();
+            JObject resault = JObject.Parse(await response.Content.ReadAsStringAsync());
             return resault;
+
         }
     }
 }
