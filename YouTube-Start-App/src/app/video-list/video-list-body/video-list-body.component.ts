@@ -3,6 +3,9 @@ import { VideoService } from 'src/app/shared/video.service';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common' 
 import { HttpClient } from '@angular/common/http';
+import { ConfirmRemoveVideoComponent } from 'src/app/shared/modals/confirm-remove-video/confirm-remove-video.component';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { Video } from 'src/app/shared/video.model';
 
 @Component({
   selector: 'app-video-list-body',
@@ -11,7 +14,9 @@ import { HttpClient } from '@angular/common/http';
 })
 export class VideoListBodyComponent implements OnInit {
   constructor(
+    // private activeModal: NgbActiveModal,
     private service: VideoService,
+    private _modalService: NgbModal,
     private toastr: ToastrService,
     public datepipe: DatePipe
   ) { }
@@ -20,13 +25,9 @@ export class VideoListBodyComponent implements OnInit {
     
   }
 
-  removeVideo(url: string) {    
-    if (confirm("Вы действительно хотите удалить данный материал?")) {
-      this.service.removeVideo(url).subscribe(res => {
-        this.toastr.warning('Delete successfully', 'Trying to delete video...')
-        this.service.refreshList();
-      });
-    }
+  openDelConfirm(video: Video) {
+    const modalRef = this._modalService.open(ConfirmRemoveVideoComponent);
+    modalRef.componentInstance.video = video;
   }
-
+  
 }

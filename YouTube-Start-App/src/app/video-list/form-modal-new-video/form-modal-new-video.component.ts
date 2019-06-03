@@ -1,8 +1,8 @@
 import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, NgForm } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { VideoService } from '../shared/video.service';
-import { ToolsService } from '../shared/tools.service';
+import { VideoService } from '../../shared/video.service';
+import { ToolsService } from '../../shared/tools.service';
 import { invalid } from '@angular/compiler/src/render3/view/util';
 
 @Component({
@@ -29,9 +29,6 @@ export class FormModalNewVideoComponent implements OnInit {
 
   }
 
-  // https://www.youtube.com/watch?v=EtH9Yllzjcc
-  // https://www.youtube.com/watch?v=SXJEEqgaYWs
-
   trySetVideoTitle(delay: number) {
     try {
       let url = this.net.getParamsURL(this.myForm.get('url').value);
@@ -46,13 +43,13 @@ export class FormModalNewVideoComponent implements OnInit {
           })
           .catch(err => { });
       }
-    } catch (err) { 
-      this.myForm.patchValue({title:''});
+    } catch (err) {
+      this.myForm.patchValue({ title: '' });
     }
 
     setTimeout(() => {
       let url = this.net.getParamsURL(this.myForm.get('url').value);
-      if(url != this.currentUrl) {
+      if (url != this.currentUrl) {
         this.trySetVideoTitle(0);
       }
       this.typing = false;
@@ -77,9 +74,6 @@ export class FormModalNewVideoComponent implements OnInit {
     this.activeModal.close(this.myForm.value);
   }
 
-  insertRecord() {
-
-  }
   closeModal() {
     this.activeModal.dismiss('Modal Dismissed');
   }
