@@ -8,6 +8,6 @@
   <p><strong>Вы действительно хотите удалить данное видео?<br><span class="text-primary">{{video.title}}</span></strong></p>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')">Нет</button>
+  <button type="button" class="btn btn-outline-secondary" (click)="modal.dismiss('cancel click')" ngbAutofocus >Нет</button>
   <button type="button" class="btn btn-danger" (click)="removeVideo()">Да</button>
 </div>

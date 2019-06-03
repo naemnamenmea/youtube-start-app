@@ -1,9 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { VideoService } from '../../video.service';
+import { VideoService } from '../../video/video.service';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common';
-import { Video } from '../../video.model';
+import { Video } from '../../video/video.model';
 
 @Component({
   selector: 'app-confirm-remove-video',

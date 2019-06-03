@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using CoreWebAPI.Models;
@@ -52,6 +53,20 @@ namespace CoreWebAPI.Controllers
             return data["title"].ToString();
         }
 
+        [Route("[action]/{num}")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Video>>> Top([FromRoute] int num)
+        {
+            return await _context.VideoItems.OrderByDescending(video => video.grade).Take(num).ToListAsync();
+        }
+
+        [Route("[action]")]
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<Video>>> Latest()
+        {
+            return await _context.VideoItems.OrderByDescending(video => video.posted_date).ToListAsync();
+        }
+
         // GET: api/Videos
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Video>>> Get()
@@ -78,6 +93,7 @@ namespace CoreWebAPI.Controllers
         public async Task<ActionResult<Video>> Post(string videoId) //async Task<ActionResult<
         {
 
+            //_logger.LogInformation(CreateLogMsg(ref videoId));
             //Video video = Mapper.Map<Video>(noembedService.GetYouTubeVideoJSON(videoId));
 
             var item = await _context.VideoItems.FindAsync(videoId);
@@ -96,6 +112,7 @@ namespace CoreWebAPI.Controllers
             {
                 id = videoId,
                 title = data["title"].ToString(),
+                posted_date = DateTime.Now,
                 thumbnail = data["thumbnail_url"].ToString()
             };
 
@@ -110,7 +127,6 @@ namespace CoreWebAPI.Controllers
         //public void Post(string videoId)
         //{
 
-        //    _logger.LogInformation(CreateLogMsg(ref videoId));
 
         //    WebRequest request = WebRequest.Create("https://noembed.com/embed?url=https://www.youtube.com/watch?v=" + videoId);
 

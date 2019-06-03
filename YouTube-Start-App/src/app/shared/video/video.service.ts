@@ -11,10 +11,12 @@ export class VideoService {
   video: Video;
   videoList: Video[];
   readonly youtubeURL = 'https://www.youtube.com';
-  // readonly rootURL = 'http://localhost:58965/api';
   readonly rootURL = 'https://localhost:44326/api';
   readonly videosController = 'videos';
+  readonly videosAPI = this.rootURL + '/' + this.videosController;
   readonly titleAction = 'gettitle';
+  readonly topAction = 'top';
+  readonly latestAction = 'latest';
 
   constructor(
     private http: HttpClient
@@ -27,23 +29,23 @@ export class VideoService {
 
     this.testConnection();
   }
-  
+
   // getVideo(videoId: string) {
   //   return this.http.get("https://noembed.com/embed?url=https://www.youtube.com/watch?v=" + videoId);
   // }
 
   getTitle(videoId: string) {
-    return this.http.get(this.rootURL + '/' + this.videosController+ '/' + this.titleAction + "/" + videoId);
+    return this.http.get(this.videosAPI + '/' + this.titleAction + "/" + videoId);
   }
 
   testConnection() {
-    this.http.get(this.rootURL + '/' + this.videosController)
-    .toPromise().then(res => {
-      console.log('SUCCESS: Connection established!');
-      console.log(res);
-    }).catch((error) => {
-      console.log(error);
-    });
+    this.http.get(this.videosAPI)
+      .toPromise().then(res => {
+        console.log('SUCCESS: Connection established!');
+        console.log(res);
+      }).catch((error) => {
+        console.log(error);
+      });
   }
 
   existsVideo(id: string) {
@@ -51,24 +53,30 @@ export class VideoService {
   }
 
   refreshList() {
-    this.http.get(this.rootURL + '/' + this.videosController)
+    this.http.get(this.videosAPI)
       .subscribe(res => this.videoList = res as Video[]);
   }
 
   addVideo(videoId: string) {
-    return this.http.post(this.rootURL + '/' + this.videosController + "?videoId=" + videoId, null);
+    return this.http.post(this.videosAPI + "?videoId=" + videoId, null);
   }
 
   removeVideo(videoId: string) {
-    return this.http.delete(this.rootURL + '/' + this.videosController + '/' + videoId);
+    return this.http.delete(this.videosAPI + '/' + videoId);
   }
 
   showLastVideos() {
-
+    return this.http.get(this.videosAPI + '/' + this.latestAction)
+    .subscribe(res => this.videoList = res as Video[]);
   }
 
-  top(num: number = 10) {
-    this.refreshList();
+  showTopVideos(num: number = 10) {
+    return this.http.get(this.videosAPI + '/' + this.topAction + '/' + num)
+    .subscribe(res => this.videoList = res as Video[]);
+  }
+
+  sortByData(order: boolean = false) {
+
   }
 
   getVideoById(videoId: string) {
@@ -81,10 +89,12 @@ export class VideoService {
     //   })
     // };
     // return this.http.get(url, httpOptions);
-    return this.http.get(url, {responseType: 'json',       headers: new HttpHeaders({        
-      'Content-Type': 'application/json',
-      'Authorization': 'my-auth-token',
-      'Access-Control-Allow-Headers': 'access-control-allow-origin'
-    })});
+    return this.http.get(url, {
+      responseType: 'json', headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Authorization': 'my-auth-token',
+        'Access-Control-Allow-Headers': 'access-control-allow-origin'
+      })
+    });
   }
 }
