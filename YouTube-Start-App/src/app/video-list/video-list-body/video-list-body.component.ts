@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { VideoService } from 'src/app/shared/video.service';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common' 

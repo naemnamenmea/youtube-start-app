@@ -3,7 +3,8 @@
   "compilerOptions": {
     "baseUrl": "./",
     "outDir": "./dist/out-tsc",
-    "sourceMap": true,
+    "sourceMap": true,    
+    // "types": ["node"],
     "declaration": false,
     "module": "es2015",
     "moduleResolution": "node",
