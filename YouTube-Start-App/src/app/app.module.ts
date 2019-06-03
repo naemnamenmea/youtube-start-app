@@ -6,13 +6,16 @@ import { NgModule } from '@angular/core';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { VideoListComponent } from './video-list/video-list.component';
+import { VideoListComponent } from './_components/video-list';
 import { HttpClientModule } from '@angular/common/http';
-import { FormModalNewVideoComponent } from './video-list/form-modal-new-video/form-modal-new-video.component';
-import { VideoListHeaderComponent } from './video-list/video-list-header/video-list-header.component'
-import { VideoListBodyComponent } from './video-list/video-list-body/video-list-body.component'
+import { FormModalNewVideoComponent } from './_components/form-modal-new-video';
+import { VideoListHeaderComponent } from './_components/video-list-header'
+import { VideoListBodyComponent } from './_components/video-list-body'
 import { EmbedVideo } from 'ngx-embed-video';
-import { ConfirmRemoveVideoComponent } from './shared/modals/confirm-remove-video/confirm-remove-video.component';
+import { ConfirmRemoveVideoComponent } from './_components/confirm-remove-video';
+import { HomeComponent } from './home';
+import { LoginComponent } from './login';
+import { RegisterComponent } from './register';
 
 @NgModule({
   declarations: [
@@ -21,7 +24,10 @@ import { ConfirmRemoveVideoComponent } from './shared/modals/confirm-remove-vide
     VideoListBodyComponent,
     ConfirmRemoveVideoComponent,
     VideoListHeaderComponent,
-    FormModalNewVideoComponent
+    FormModalNewVideoComponent,
+    HomeComponent,
+    LoginComponent,
+    RegisterComponent
   ],
   imports: [
     FormsModule,

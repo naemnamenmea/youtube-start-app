@@ -1,8 +1,8 @@
 import { Component, Output, EventEmitter, Input, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, FormControl, Validators, NgForm } from '@angular/forms';
 import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { VideoService } from '../../shared/video/video.service';
-import { ToolsService } from '../../shared/tools/tools.service';
+import { VideoService } from '../../_services/video/video.service';
+import { ToolsService } from '../../_services/tools/tools.service';
 import { invalid } from '@angular/compiler/src/render3/view/util';
 
 @Component({

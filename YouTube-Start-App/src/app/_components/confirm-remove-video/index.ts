@@ -1,0 +1,1 @@
+export * from './confirm-remove-video.component'

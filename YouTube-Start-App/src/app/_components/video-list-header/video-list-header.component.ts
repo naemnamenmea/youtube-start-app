@@ -1,13 +1,13 @@
 
 import { Component, OnInit, Input } from '@angular/core';
-import { VideoService } from 'src/app/shared/video/video.service';
 import { FormModalNewVideoComponent } from '../form-modal-new-video/form-modal-new-video.component';
-import { Video } from '../../shared/video/video.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { HttpClient } from '@angular/common/http';
 import { NgForm } from '@angular/forms';
-import { ToolsService } from 'src/app/shared/tools/tools.service';
 import { ToastrService } from 'ngx-toastr';
+import { VideoService } from '../../_services/video/video.service';
+import { Video } from '../../_models/video/video.model';
+import { ToolsService } from '../../_services/tools/tools.service';
 
 @Component({
   selector: 'app-video-list-header',

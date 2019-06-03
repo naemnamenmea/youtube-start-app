@@ -1,11 +1,11 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
-import { VideoService } from 'src/app/shared/video/video.service';
+import { VideoService } from 'src/app/_services/video/video.service';
 import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common' 
 import { HttpClient } from '@angular/common/http';
-import { ConfirmRemoveVideoComponent } from 'src/app/shared/modals/confirm-remove-video/confirm-remove-video.component';
+import { ConfirmRemoveVideoComponent } from 'src/app/_components/confirm-remove-video/confirm-remove-video.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { Video } from 'src/app/shared/video/video.model';
+import { Video } from 'src/app/_models/video/video.model';
 
 @Component({
   selector: 'app-video-list-body',
