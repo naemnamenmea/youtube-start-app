@@ -1,14 +1,9 @@
-<!-- <a class="fancybox-me" data-fancybox="gallery" href="https://www.youtube.com/watch?v=hY4j_-HbTDw">
-  <img  src="assets/img/1_s.jpg">
-</a> -->
-<a data-fancybox="gallery" href="https://www.youtube.com/watch?v=hY4j_-HbTDw">
-  <img  src="assets/img/1_s.jpg">
-</a>
-
 <table class="table table-hover video-list mx-auto">
   <tr *ngFor="let video of service.videoList">
     <td class="container-fluid d-flex video-container">
-      <img class="video-thumbnail" [src]="video.thumbnail" alt="">
+        <a data-fancybox="gallery" href="https://www.youtube.com/watch?v={{video.id}}">
+          <img class="video-thumbnail" [src]="video.thumbnail">
+        </a>      
       <div class="d-flex flex-wrap video-info bg-light align-content-between w-100">
         <div class="d-flex justify-content-between w-100 m-2">
           <span class="title">{{video.title}}</span>
