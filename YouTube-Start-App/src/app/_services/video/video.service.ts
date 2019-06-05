@@ -58,21 +58,8 @@ export class VideoService {
     return this.http.post(this.videosAPI, video);
   }
 
-  addVideoById(videoId: string) {
-    this.getVideo(videoId);
-  }
-
-  getVideo(videoId: string) {
-   return this.http.get('https://noembed.com/embed?url=https://www.youtube.com/watch?v=' + videoId)
-      .toPromise().then(res => {
-        return {
-          id: videoId,
-          title: res['title'],
-          grade: null,
-          posted_date: new Date(),
-          thumbnail: res['thumbnail_url']
-        } as Video;
-      }).catch(err => null);
+  getNoembedYoutubeVideo(videoId: string) {
+    return this.http.get('https://noembed.com/embed?url=https://www.youtube.com/watch?v=' + videoId);
   }
 
   removeVideo(videoId: string) {

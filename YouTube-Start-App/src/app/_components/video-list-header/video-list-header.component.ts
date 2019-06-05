@@ -31,10 +31,7 @@ export class VideoListHeaderComponent implements OnInit {
 
   openFormModal() {
     const modalRef = this.modalService.open(FormModalNewVideoComponent);
-    modalRef.result.then((res: any) => {
-      let params = this.net.getParamsURL(res.url);
-      let videoId = this.net.getValueByKeyFromURL(params, "v");
-      let video = this.videoService.getVideo(videoId);
+    modalRef.result.then((video: Video) => {
       this.videoService.addVideo(video).
         toPromise().then(res => {
           this.videoService.refreshList();
@@ -47,7 +44,7 @@ export class VideoListHeaderComponent implements OnInit {
           }
           this.toastr.warning(error_msg, 'Trying to add new video...')
         });
-    }, (reason) => { }).catch((error) => {
+    }, reason => null).catch((error) => {
       this.toastr.warning('Wrong url', 'Trying to add new video...')
     });
   }

@@ -16,6 +16,7 @@ export class FormModalNewVideoComponent implements OnInit {
   @Input() myForm: FormGroup;
   typing: boolean;
   currentUrl: string;
+  video: Video;
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -30,7 +31,7 @@ export class FormModalNewVideoComponent implements OnInit {
 
   }
 
-  async trySetVideoTitle(delay: number) {
+  tryUpdateNewVideoInfo(delay: number) {
     try {
       let url = this.net.getParamsURL(this.myForm.get('url').value);
       if (url != this.currentUrl) {
@@ -38,11 +39,18 @@ export class FormModalNewVideoComponent implements OnInit {
         let videoId = this.net.getValueByKeyFromURL(url, "v");
         if (videoId.length != 11)
           throw 'invalid id';
-        let video = await this.service.getVideo(videoId);
-          toPromise().then((video: Video) => {
-            this.myForm.patchValue({ title: video.title });
+        this.service.getNoembedYoutubeVideo(videoId)
+          .toPromise().then((noembedItem) => {
+            this.video = {
+              id: videoId,
+              title: noembedItem['title'],
+              grade: null,
+              posted_date: new Date(),
+              thumbnail: noembedItem['thumbnail_url']
+            };
+            this.myForm.patchValue({ title: this.video.title });
           })
-          .catch(err => { });
+          .catch(err => null);
       }
     } catch (err) {
       this.myForm.patchValue({ title: '' });
@@ -51,16 +59,16 @@ export class FormModalNewVideoComponent implements OnInit {
     setTimeout(() => {
       let url = this.net.getParamsURL(this.myForm.get('url').value);
       if (url != this.currentUrl) {
-        this.trySetVideoTitle(0);
+        this.tryUpdateNewVideoInfo(0);
       }
       this.typing = false;
     }, delay);
   }
 
-  tryVideoTitle() {
+  tryGetVideo() {
     if (!this.typing) {
       this.typing = true;
-      this.trySetVideoTitle(822);
+      this.tryUpdateNewVideoInfo(822);
     }
   }
 
@@ -72,7 +80,7 @@ export class FormModalNewVideoComponent implements OnInit {
   }
 
   private submitForm() {
-    this.activeModal.close(this.myForm.value);
+    this.activeModal.close(this.video);
   }
 
   closeModal() {
