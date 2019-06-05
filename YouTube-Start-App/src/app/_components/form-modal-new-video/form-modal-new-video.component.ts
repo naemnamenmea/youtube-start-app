@@ -4,6 +4,7 @@ import { NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { VideoService } from '../../_services/video/video.service';
 import { ToolsService } from '../../_services/tools/tools.service';
 import { invalid } from '@angular/compiler/src/render3/view/util';
+import { Video } from 'src/app/_models/video/video.model';
 
 @Component({
   selector: 'app-form-modal-new-video',
@@ -29,7 +30,7 @@ export class FormModalNewVideoComponent implements OnInit {
 
   }
 
-  trySetVideoTitle(delay: number) {
+  async trySetVideoTitle(delay: number) {
     try {
       let url = this.net.getParamsURL(this.myForm.get('url').value);
       if (url != this.currentUrl) {
@@ -37,9 +38,9 @@ export class FormModalNewVideoComponent implements OnInit {
         let videoId = this.net.getValueByKeyFromURL(url, "v");
         if (videoId.length != 11)
           throw 'invalid id';
-        this.service.getTitle(videoId).
-          toPromise().then((titleValue: string) => {
-            this.myForm.patchValue({ title: titleValue });
+        let video = await this.service.getVideo(videoId);
+          toPromise().then((video: Video) => {
+            this.myForm.patchValue({ title: video.title });
           })
           .catch(err => { });
       }

@@ -27,16 +27,12 @@ export class VideoService {
     //     console.log(res);
     //   });
 
-    this.testConnection();
+    //this.testConnection();
   }
 
   // getVideo(videoId: string) {
   //   return this.http.get("https://noembed.com/embed?url=https://www.youtube.com/watch?v=" + videoId);
   // }
-
-  getTitle(videoId: string) {
-    return this.http.get(this.videosAPI + '/' + this.titleAction + "/" + videoId);
-  }
 
   testConnection() {
     this.http.get(this.videosAPI)
@@ -57,8 +53,26 @@ export class VideoService {
       .subscribe(res => this.videoList = res as Video[]);
   }
 
-  addVideo(videoId: string) {
-    return this.http.post(this.videosAPI + "?videoId=" + videoId, null);
+  addVideo(video: Video) {
+    // return this.http.post(this.videosAPI + "?videoId=" + videoId, null);    
+    return this.http.post(this.videosAPI, video);
+  }
+
+  addVideoById(videoId: string) {
+    this.getVideo(videoId);
+  }
+
+  getVideo(videoId: string) {
+   return this.http.get('https://noembed.com/embed?url=https://www.youtube.com/watch?v=' + videoId)
+      .toPromise().then(res => {
+        return {
+          id: videoId,
+          title: res['title'],
+          grade: null,
+          posted_date: new Date(),
+          thumbnail: res['thumbnail_url']
+        } as Video;
+      }).catch(err => null);
   }
 
   removeVideo(videoId: string) {
@@ -67,12 +81,12 @@ export class VideoService {
 
   showLastVideos() {
     return this.http.get(this.videosAPI + '/' + this.latestAction)
-    .subscribe(res => this.videoList = res as Video[]);
+      .subscribe(res => this.videoList = res as Video[]);
   }
 
   showTopVideos(num: number = 10) {
     return this.http.get(this.videosAPI + '/' + this.topAction + '/' + num)
-    .subscribe(res => this.videoList = res as Video[]);
+      .subscribe(res => this.videoList = res as Video[]);
   }
 
   sortByData(order: boolean = false) {

@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 import { VideoService } from '../../_services/video/video.service';
 import { Video } from '../../_models/video/video.model';
 import { ToolsService } from '../../_services/tools/tools.service';
+import { Observable, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-video-list-header',
@@ -22,7 +23,7 @@ export class VideoListHeaderComponent implements OnInit {
     private modalService: NgbModal,
     private toastr: ToastrService,
     private net: ToolsService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.videoService.refreshList();
@@ -33,24 +34,21 @@ export class VideoListHeaderComponent implements OnInit {
     modalRef.result.then((res: any) => {
       let params = this.net.getParamsURL(res.url);
       let videoId = this.net.getValueByKeyFromURL(params, "v");
-      this.videoService.addVideo(videoId).
+      let video = this.videoService.getVideo(videoId);
+      this.videoService.addVideo(video).
         toPromise().then(res => {
           this.videoService.refreshList();
         }).catch(err => {
           let error_msg = 'Unknown error';
-          if(err.status == 409) {
+          if (err.status == 409) {
             error_msg = 'Video already exists';
-          } else if(err.status = 404) {
+          } else if (err.status = 404) {
             error_msg = 'Video not found';
           }
           this.toastr.warning(error_msg, 'Trying to add new video...')
         });
-    }, (reason) => {}).catch((error) => {
+    }, (reason) => { }).catch((error) => {
       this.toastr.warning('Wrong url', 'Trying to add new video...')
     });
   }
 }
-
-// "thumbnail_url": "https://i.ytimg.com/vi/cS0NScCcFSY/hqdefault.jpg",
-// "title": "Connect mysql with ASP.NET Core",
-// "html": "\n<iframe width=\" 480\" height=\"270\" src=\"https://www.youtube.com/embed/cS0NScCcFSY?feature=oembed\" frameborder=\"0\" allowfullscreen=\"allowfullscreen\"></iframe>\n",

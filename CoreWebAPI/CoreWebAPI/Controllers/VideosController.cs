@@ -90,31 +90,14 @@ namespace CoreWebAPI.Controllers
 
         // POST api/Videos
         [HttpPost]
-        public async Task<ActionResult<Video>> Post(string videoId) //async Task<ActionResult<
+        public async Task<ActionResult<Video>> Post([FromBody] Video video) //async Task<ActionResult<
         {
 
             //_logger.LogInformation(CreateLogMsg(ref videoId));
-            //Video video = Mapper.Map<Video>(noembedService.GetYouTubeVideoJSON(videoId));
 
-            var item = await _context.VideoItems.FindAsync(videoId);
+            var item = await _context.VideoItems.FindAsync(video.id);
             if (item != null)
-                return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status409Conflict);
-
-            var data = await noembedService.GetYouTubeVideoJSON(videoId);
-            if (data.ContainsKey("error"))
-            {
-                return NotFound();
-            }
-
-            //Video video = JsonConvert.DeserializeObject<Video>(data);
-
-            Video video = new Video
-            {
-                id = videoId,
-                title = data["title"].ToString(),
-                posted_date = DateTime.Now,
-                thumbnail = data["thumbnail_url"].ToString()
-            };
+                return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status409Conflict);            
 
             _context.VideoItems.Add(video);
             await _context.SaveChangesAsync();
