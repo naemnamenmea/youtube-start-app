@@ -14,7 +14,7 @@ import { Video } from 'src/app/_models/video/video.model';
 export class FormModalNewVideoComponent implements OnInit {
 
   @Input() myForm: FormGroup;
-  typing: boolean;
+  typing: boolean = false;
   currentUrl: string;
   video: Video;
 
@@ -32,29 +32,34 @@ export class FormModalNewVideoComponent implements OnInit {
   }
 
   tryUpdateNewVideoInfo(delay: number) {
-    let url = this.net.getParamsURL(this.myForm.get('url').value);
-    if (url == this.currentUrl)
-      return null;
-      
-    this.currentUrl = url;
-    let videoId = this.net.getValueByKeyFromURL(url, "v");
-    this.service.getNoembedYoutubeVideo(videoId)
-      .toPromise().then((noembedItem) => {
-        if (noembedItem.hasOwnProperty('error'))
+    try {
+      let url = this.net.getParamsURL(this.myForm.get('url').value);
+      if (url != this.currentUrl) {
+        this.currentUrl = url;
+        let videoId = this.net.getValueByKeyFromURL(url, "v"); // Обработать исключение query == null
+        if (videoId.length != 11)
           throw 'invalid id';
-        this.video = {
-          id: videoId,
-          title: noembedItem['title'],
-          grade: null,
-          posted_date: new Date(),
-          thumbnail: noembedItem['thumbnail_url']
-        };
-        this.myForm.patchValue({ title: this.video.title });
-      }).catch(err => {
-        console.log('GJ');
-        this.video = null;
-        this.myForm.patchValue({ title: '' });
-      });
+        this.service.getNoembedYoutubeVideo(videoId)
+          .toPromise().then((noembedItem) => {
+            if (noembedItem.hasOwnProperty('error'))
+              throw 'invalid id';
+            this.video = {
+              id: videoId,
+              title: noembedItem['title'],
+              grade: null,
+              posted_date: new Date(),
+              thumbnail: noembedItem['thumbnail_url']
+            };
+            this.myForm.patchValue({ title: this.video.title });
+          }).catch(err => {
+            this.video = null;
+            this.myForm.patchValue({ title: '' });
+          });
+      }
+    } catch (err) { // Убрать копипасту
+      this.video = null;
+      this.myForm.patchValue({ title: '' });
+    }
 
     setTimeout(() => {
       let url = this.net.getParamsURL(this.myForm.get('url').value);
