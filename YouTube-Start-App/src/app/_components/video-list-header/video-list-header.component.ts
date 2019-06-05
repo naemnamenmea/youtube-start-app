@@ -34,6 +34,7 @@ export class VideoListHeaderComponent implements OnInit {
     modalRef.result.then((video: Video) => {
       this.videoService.addVideo(video).
         toPromise().then(res => {
+          this.toastr.success('Video successfuly added', 'Trying to add new video...')
           this.videoService.refreshList();
         }).catch(err => {
           let error_msg = 'Unknown error';

@@ -32,29 +32,29 @@ export class FormModalNewVideoComponent implements OnInit {
   }
 
   tryUpdateNewVideoInfo(delay: number) {
-    try {
-      let url = this.net.getParamsURL(this.myForm.get('url').value);
-      if (url != this.currentUrl) {
-        this.currentUrl = url;
-        let videoId = this.net.getValueByKeyFromURL(url, "v");
-        if (videoId.length != 11)
+    let url = this.net.getParamsURL(this.myForm.get('url').value);
+    if (url == this.currentUrl)
+      return null;
+      
+    this.currentUrl = url;
+    let videoId = this.net.getValueByKeyFromURL(url, "v");
+    this.service.getNoembedYoutubeVideo(videoId)
+      .toPromise().then((noembedItem) => {
+        if (noembedItem.hasOwnProperty('error'))
           throw 'invalid id';
-        this.service.getNoembedYoutubeVideo(videoId)
-          .toPromise().then((noembedItem) => {
-            this.video = {
-              id: videoId,
-              title: noembedItem['title'],
-              grade: null,
-              posted_date: new Date(),
-              thumbnail: noembedItem['thumbnail_url']
-            };
-            this.myForm.patchValue({ title: this.video.title });
-          })
-          .catch(err => null);
-      }
-    } catch (err) {
-      this.myForm.patchValue({ title: '' });
-    }
+        this.video = {
+          id: videoId,
+          title: noembedItem['title'],
+          grade: null,
+          posted_date: new Date(),
+          thumbnail: noembedItem['thumbnail_url']
+        };
+        this.myForm.patchValue({ title: this.video.title });
+      }).catch(err => {
+        console.log('GJ');
+        this.video = null;
+        this.myForm.patchValue({ title: '' });
+      });
 
     setTimeout(() => {
       let url = this.net.getParamsURL(this.myForm.get('url').value);
