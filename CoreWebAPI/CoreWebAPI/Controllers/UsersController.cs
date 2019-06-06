@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using CoreWebAPI.Models;
+using CoreWebAPI.Services;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using CoreWebAPI.Models;
-using Microsoft.AspNetCore.Cors;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace CoreWebAPI.Controllers
 {
@@ -17,9 +17,9 @@ namespace CoreWebAPI.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ILogger _logger;
-        private readonly VideoService _context;
+        private readonly YouTubeAppContext _context;
 
-        public UsersController(VideoService context, ILogger<VideosController> logger)
+        public UsersController(YouTubeAppContext context, ILogger<VideosController> logger)
         {
             _context = context;
             _logger = logger;

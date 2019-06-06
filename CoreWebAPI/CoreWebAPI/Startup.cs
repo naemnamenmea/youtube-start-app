@@ -1,20 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using AutoMapper;
+using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.EntityFrameworkCore;
-using CoreWebAPI.Models;
-using CoreWebAPI.Services;
-using AutoMapper;
 
 namespace CoreWebAPI
 {
@@ -30,8 +21,8 @@ namespace CoreWebAPI
         public void ConfigureServices(IServiceCollection services)
         {
             //services.AddDbContext<VideoContext>(opt => opt.UseInMemoryDatabase("VideoList"));
-            services.AddDbContext<VideoService>(opt =>
-                opt.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContext<YouTubeAppContext>(opt =>
+                opt.UseMySQL(Configuration.GetConnectionString("HomeConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors(options =>
             {
@@ -45,9 +36,10 @@ namespace CoreWebAPI
                     .AllowAnyMethod();
                 });
             });
-            services.AddHttpClient<NoEmbedService>();
+            services.AddHttpClient<NoEmbedContext>();
 
-            var mappingConfig = new MapperConfiguration(mc => {
+            var mappingConfig = new MapperConfiguration(mc =>
+            {
                 mc.AddProfile(new MappingProfile());
             });
             IMapper mapper = mappingConfig.CreateMapper();

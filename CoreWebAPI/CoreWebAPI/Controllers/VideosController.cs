@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using AutoMapper;
+﻿using AutoMapper;
 using CoreWebAPI.Models;
 using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,10 +20,10 @@ namespace CoreWebAPI.Controllers
     [ApiController]
     public class VideosController : Controller
     {
-        private readonly VideoService _context;
+        private readonly YouTubeAppContext _context;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
-        private NoEmbedService noembedService;
+        private NoEmbedContext noembedService;
 
         private string CreateLogMsg(string msg)
         {
@@ -32,8 +31,8 @@ namespace CoreWebAPI.Controllers
             return ":::::(" + current_time + "):::::> \"" + msg + "\"";
         }
 
-        public VideosController(VideoService context,
-            ILogger<VideosController> logger, NoEmbedService noembed, IMapper mapper)
+        public VideosController(YouTubeAppContext context,
+            ILogger<VideosController> logger, NoEmbedContext noembed, IMapper mapper)
         {
             _context = context;
             noembedService = noembed;

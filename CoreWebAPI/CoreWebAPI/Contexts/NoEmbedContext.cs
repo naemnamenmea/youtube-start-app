@@ -1,21 +1,16 @@
-﻿using CoreWebAPI.Models;
-using Microsoft.AspNetCore.Cors;
-using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace CoreWebAPI.Services
 {
-    public class NoEmbedService
+    public class NoEmbedContext
     {
 
         public HttpClient Client { get; }
 
-        public NoEmbedService(HttpClient client)
+        public NoEmbedContext(HttpClient client)
         {
             client.BaseAddress = new Uri("https://noembed.com/");
             client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");
