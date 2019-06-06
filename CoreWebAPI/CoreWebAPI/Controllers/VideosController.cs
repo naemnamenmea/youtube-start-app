@@ -40,7 +40,7 @@ namespace CoreWebAPI.Controllers
             _logger = logger;
             _mapper = mapper;
         }
-
+        
         [Route("[action]/{id}")]
         [HttpGet]
         public async Task<ActionResult<string>> GetTitle([FromRoute] string id)

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Video } from '../../_models/video/video.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -11,9 +11,8 @@ export class VideoService {
   video: Video;
   videoList: Video[];
   readonly youtubeURL = 'https://www.youtube.com';
-  readonly rootURL = 'https://localhost:44326/api';
   readonly videosController = 'videos';
-  readonly videosAPI = this.rootURL + '/' + this.videosController;
+  readonly videosAPI = environment.serverURL + '/api/' + this.videosController;
   readonly titleAction = 'gettitle';
   readonly topAction = 'top';
   readonly latestAction = 'latest';
@@ -51,6 +50,10 @@ export class VideoService {
   refreshList() {
     this.http.get(this.videosAPI)
       .subscribe(res => this.videoList = res as Video[]);
+  }
+
+  sendVote(videoId: string, vote: number) {
+    
   }
 
   addVideo(video: Video) {

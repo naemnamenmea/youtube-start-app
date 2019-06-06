@@ -7,7 +7,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { VideoListComponent } from './_components/video-list';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormModalNewVideoComponent } from './_components/form-modal-new-video';
 import { VideoListHeaderComponent } from './_components/video-list-header'
 import { VideoListBodyComponent } from './_components/video-list-body'
@@ -16,6 +16,8 @@ import { ConfirmRemoveVideoComponent } from './_components/confirm-remove-video'
 import { HomeComponent } from './home';
 import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
+import { appRoutingModule } from './app.routing';
+import { JwtInterceptor, ErrorInterceptor } from './_helpers';
 
 @NgModule({
   declarations: [
@@ -30,6 +32,7 @@ import { RegisterComponent } from './register';
     RegisterComponent
   ],
   imports: [
+    appRoutingModule,
     FormsModule,
     ReactiveFormsModule,
     BrowserModule,
@@ -41,10 +44,12 @@ import { RegisterComponent } from './register';
     EmbedVideo.forRoot()
   ],
   providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
     DatePipe
   ],
   exports: [],
-  bootstrap: [AppComponent,],
+  bootstrap: [AppComponent],
   entryComponents: [
     FormModalNewVideoComponent,
     ConfirmRemoveVideoComponent

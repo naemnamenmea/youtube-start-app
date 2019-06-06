@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Net.Http;
 using System.Threading.Tasks;
+using CoreWebAPI.Models;
 
 namespace CoreWebAPI.Models
 {
@@ -15,6 +16,8 @@ namespace CoreWebAPI.Models
         }
 
         public DbSet<Video> VideoItems { get; set; }
+
+        public DbSet<User> Users { get; set; }
 
         //public string ConnectionString { get; set; }
 
