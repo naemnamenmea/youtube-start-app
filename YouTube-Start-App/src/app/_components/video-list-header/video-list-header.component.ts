@@ -31,22 +31,17 @@ export class VideoListHeaderComponent implements OnInit {
 
   openFormModal() {
     const modalRef = this.modalService.open(FormModalNewVideoComponent);
+    let alert_title='Добавление видео...';
     modalRef.result.then((video: Video) => {
       this.videoService.addVideo(video).
         toPromise().then(res => {
-          this.toastr.success('Video successfuly added', 'Trying to add new video...')
+          this.toastr.success(res as string, alert_title);
           this.videoService.refreshList();
-        }).catch(err => {
-          let error_msg = 'Unknown error';
-          if (err.status == 409) {
-            error_msg = 'Video already exists';
-          } else if (err.status = 404) {
-            error_msg = 'Video not found';
-          }
-          this.toastr.warning(error_msg, 'Trying to add new video...')
+        }).catch(err => {                    
+          this.toastr.warning(err, alert_title);
         });
     }, reason => null).catch((error) => {
-      this.toastr.warning('Wrong url', 'Trying to add new video...')
+      this.toastr.warning('Неверный url', alert_title);
     });
   }
 }

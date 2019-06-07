@@ -5,8 +5,11 @@ namespace CoreWebAPI.Entities
     public class User
     {
         [Key]
-        public int id { get; set; }
-        public string password { get; set; }
-        public string username { get; set; }
+        public int Id { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Username { get; set; }
+        public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
     }
 }

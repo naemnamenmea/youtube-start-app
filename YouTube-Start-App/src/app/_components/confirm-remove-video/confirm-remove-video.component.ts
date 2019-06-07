@@ -27,7 +27,7 @@ export class ConfirmRemoveVideoComponent implements OnInit {
 
   removeVideo() {
     this.service.removeVideo(this.video.id).subscribe(res => {
-      this.toastr.warning('Delete successfully', 'Trying to delete video...')
+      this.toastr.warning(res as string, 'Попытка удалить видео...')
       this.service.refreshList();
     });
     this.modal.close('Ok click');

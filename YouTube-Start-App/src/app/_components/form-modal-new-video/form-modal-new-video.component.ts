@@ -14,9 +14,9 @@ import { Video } from 'src/app/_models/video/video.model';
 export class FormModalNewVideoComponent implements OnInit {
 
   @Input() myForm: FormGroup;
+  @Input() video: Video;
   typing: boolean = false;
   currentUrl: string;
-  video: Video;
 
   constructor(
     public activeModal: NgbActiveModal,
@@ -75,6 +75,11 @@ export class FormModalNewVideoComponent implements OnInit {
       this.typing = true;
       this.tryUpdateNewVideoInfo(822);
     }
+  }
+
+  updateTmpTitle(new_title: string) {
+    if (this.video)
+      this.video.title = new_title;
   }
 
   private createForm() {

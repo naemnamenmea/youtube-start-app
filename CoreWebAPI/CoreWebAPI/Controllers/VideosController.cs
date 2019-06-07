@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using CoreWebAPI.Entities;
+using CoreWebAPI.Helpers;
 using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +8,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,11 +20,10 @@ namespace CoreWebAPI.Controllers
     [ApiController]
     public class VideosController : Controller
     {
-        private readonly YouTubeAppContext _context;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
         private NoEmbedService noembedService;
-        private readonly IUserService _userService;
+        private readonly IVideoService _videoService;
 
         private string CreateLogMsg(string msg)
         {
@@ -32,16 +31,15 @@ namespace CoreWebAPI.Controllers
             return ":::::(" + current_time + "):::::> \"" + msg + "\"";
         }
 
-        public VideosController(YouTubeAppContext context, IUserService userv,
+        public VideosController(DataContext context, IVideoService userv,
             ILogger<VideosController> logger, NoEmbedService noembed, IMapper mapper)
         {
-            _context = context;
             noembedService = noembed;
             _logger = logger;
             _mapper = mapper;
-            _userService = userv;
+            _videoService = userv;
         }
-        
+
         [Route("[action]/{id}")]
         [HttpGet]
         public async Task<ActionResult<string>> GetTitle([FromRoute] string id)
@@ -58,52 +56,54 @@ namespace CoreWebAPI.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Video>>> Top([FromRoute] int num)
         {
-            return await _context.VideoItems.OrderByDescending(video => video.grade).Take(num).ToListAsync();
+            return await _videoService.GetTopVideosAsync(num);
         }
 
         [Route("[action]")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Video>>> Latest()
         {
-            return await _context.VideoItems.OrderByDescending(video => video.posted_date).ToListAsync();
+            return await _videoService.GetLatestVideosAsync();
         }
 
         // GET: api/Videos
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Video>>> Get()
         {
-            return await _context.VideoItems.ToListAsync();
+            return await _videoService.GetVideosAsync();
         }
 
         // GET api/Videos/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Video>> Get([FromRoute] string id)
         {
-            var videoItem = await _context.VideoItems.FindAsync(id);
+            var videoItem = await _videoService.FindVideoAsync(id);
 
             if (videoItem == null)
             {
                 return NotFound();
             }
 
-            return videoItem;
+            return Ok(videoItem);
         }
 
         // POST api/Videos
         [HttpPost]
-        public async Task<ActionResult<Video>> Post([FromBody] Video video) //async Task<ActionResult<
+        public async Task<ActionResult<Video>> Post([FromBody] Video newVideo) //async Task<ActionResult<
         {
 
             //_logger.LogInformation(CreateLogMsg(ref videoId));
 
-            var item = await _context.VideoItems.FindAsync(video.id);
-            if (item != null)
-                return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status409Conflict);            
+            Video video = await _videoService.FindVideoAsync(newVideo.id);
+            if (video != null)
+                return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status409Conflict,
+                    "Видео \"" + video.title + "\" уже существует");
 
-            _context.VideoItems.Add(video);
-            await _context.SaveChangesAsync();
-            
-            return CreatedAtAction(nameof(Get), new { id = video.id }, video);
+            _videoService.AddVideoAsync(newVideo);
+            await _videoService.SaveChangesAsync();
+
+            //return CreatedAtAction(nameof(Get), new { id = newVideo.id }, newVideo);
+            return Ok("Видео успешно добавлено");
         }
 
 
@@ -116,7 +116,7 @@ namespace CoreWebAPI.Controllers
 
         //    request.Credentials = CredentialCache.DefaultCredentials;
         //    WebResponse response = request.GetResponse();
-            
+
         //    using (Stream dataStream = response.GetResponseStream())
         //    {
         //        StreamReader reader = new StreamReader(dataStream);
@@ -136,15 +136,15 @@ namespace CoreWebAPI.Controllers
 
         // PUT api/Videos/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem([FromRoute] string id, [FromBody] Video item)
+        public async Task<IActionResult> PutTodoItem([FromRoute] string id, [FromBody] Video video)
         {
-            if (id != item.id)
+            if (id != video.id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(item).State = EntityState.Modified;
-            await _context.SaveChangesAsync();
+            _videoService.ChangeVideoState(video, EntityState.Modified);
+            await _videoService.SaveChangesAsync();
 
             return NoContent();
         }
@@ -153,17 +153,17 @@ namespace CoreWebAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] string id)
         {
-            var video = await _context.VideoItems.FindAsync(id);
+            var video = await _videoService.FindVideoAsync(id);
 
             if (video == null)
             {
                 return NotFound();
             }
 
-            _context.VideoItems.Remove(video);
-            await _context.SaveChangesAsync();
+            _videoService.Remove(video);
+            await _videoService.SaveChangesAsync();
 
-            return NoContent();
+            return Ok("Видео успешно удалено");
         }
     }
 }

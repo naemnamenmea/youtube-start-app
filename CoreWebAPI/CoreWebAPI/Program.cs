@@ -8,17 +8,18 @@ namespace CoreWebAPI
     {
         public static void Main(string[] args)
         {
-            CreateWebHostBuilder(args)
-                .Build().Run();
+            BuildWebHost(args).Run();
         }
 
-        public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
+        public static IWebHost BuildWebHost(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
                 .ConfigureLogging(logging =>
                 {
                     logging.ClearProviders();
                     logging.AddConsole();
-                });
+                })
+                //.UseUrls("http://localhost:4000")
+                .Build();
     }
 }

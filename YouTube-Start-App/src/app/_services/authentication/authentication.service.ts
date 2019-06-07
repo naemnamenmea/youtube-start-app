@@ -21,8 +21,8 @@ export class AuthenticationService {
 
   login(username, password) {
     var user = {
-      username: username,
-      password: password
+      Username: username,
+      Password: password
     } as User;
     return this.http.post<any>(`${environment.serverURL}/api/users/authenticate`, user)
       .pipe(map(user => {

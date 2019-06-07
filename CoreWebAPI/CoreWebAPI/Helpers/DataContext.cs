@@ -1,15 +1,14 @@
 ﻿using CoreWebAPI.Entities;
+using CoreWebAPI.Services;
 using Microsoft.EntityFrameworkCore;
 
-namespace CoreWebAPI.Services
+namespace CoreWebAPI.Helpers
 {
-    public class YouTubeAppContext : DbContext
+    public class DataContext : DbContext
     {
         public readonly NoEmbedService _noembedService;
 
-        public YouTubeAppContext(DbContextOptions<YouTubeAppContext> options)
-            : base(options)
-        { }
+        public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<Video> VideoItems { get; set; }
         public DbSet<User> Users { get; set; }
