@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace CoreWebAPI.Services
 {
-    public class NoEmbedContext
+    public class NoEmbedService
     {
 
         public HttpClient Client { get; }
 
-        public NoEmbedContext(HttpClient client)
+        public NoEmbedService(HttpClient client)
         {
             client.BaseAddress = new Uri("https://noembed.com/");
             client.DefaultRequestHeaders.Add("Access-Control-Allow-Origin", "*");

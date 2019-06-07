@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CoreWebAPI.Models;
+using CoreWebAPI.Entities;
 using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -23,7 +23,8 @@ namespace CoreWebAPI.Controllers
         private readonly YouTubeAppContext _context;
         private readonly ILogger _logger;
         private readonly IMapper _mapper;
-        private NoEmbedContext noembedService;
+        private NoEmbedService noembedService;
+        private readonly IUserService _userService;
 
         private string CreateLogMsg(string msg)
         {
@@ -31,13 +32,14 @@ namespace CoreWebAPI.Controllers
             return ":::::(" + current_time + "):::::> \"" + msg + "\"";
         }
 
-        public VideosController(YouTubeAppContext context,
-            ILogger<VideosController> logger, NoEmbedContext noembed, IMapper mapper)
+        public VideosController(YouTubeAppContext context, IUserService userv,
+            ILogger<VideosController> logger, NoEmbedService noembed, IMapper mapper)
         {
             _context = context;
             noembedService = noembed;
             _logger = logger;
             _mapper = mapper;
+            _userService = userv;
         }
         
         [Route("[action]/{id}")]

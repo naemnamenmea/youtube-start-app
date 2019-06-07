@@ -1,4 +1,4 @@
-﻿using CoreWebAPI.Models;
+﻿using CoreWebAPI.Entities;
 using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Http;
@@ -18,11 +18,14 @@ namespace CoreWebAPI.Controllers
     {
         private readonly ILogger _logger;
         private readonly YouTubeAppContext _context;
+        private readonly IUserService _userService;
 
-        public UsersController(YouTubeAppContext context, ILogger<VideosController> logger)
+        public UsersController(YouTubeAppContext context, ILogger<VideosController> logger,
+            IUserService userv)
         {
             _context = context;
             _logger = logger;
+            _userService = userv;
         }
 
         // GET: api/Users
@@ -44,7 +47,7 @@ namespace CoreWebAPI.Controllers
             }
             else
             {
-                return BadRequest("Username or password is incorrect");
+                return BadRequest("Неверное имя пользователя или пароль");
             }
         }
 
@@ -52,11 +55,11 @@ namespace CoreWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> Register([FromBody] User user)
         {
-            var myUser = await _context.Users.FirstOrDefaultAsync(u => u.username ==  user.username);
+            var myUser = _userService.GetUser(user.username);
             if (myUser != null)
             {
                 return StatusCode(StatusCodes.Status409Conflict,
-                    "Username \"" + user.username + "\" already taken");
+                    "Имя пользователя \"" + user.username + "\" уже занято");
             }
 
             _context.Users.Add(user);

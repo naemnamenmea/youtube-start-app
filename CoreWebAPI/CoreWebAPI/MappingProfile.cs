@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CoreWebAPI.Models;
+using CoreWebAPI.Entities;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;

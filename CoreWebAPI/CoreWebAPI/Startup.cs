@@ -36,7 +36,8 @@ namespace CoreWebAPI
                     .AllowAnyMethod();
                 });
             });
-            services.AddHttpClient<NoEmbedContext>();
+            services.AddHttpClient<NoEmbedService>();
+            services.AddScoped<IUserService, UserService>();
 
             var mappingConfig = new MapperConfiguration(mc =>
             {
