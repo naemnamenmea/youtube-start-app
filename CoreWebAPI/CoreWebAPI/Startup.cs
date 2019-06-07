@@ -39,15 +39,15 @@ namespace CoreWebAPI
             });
             //services.AddDbContext<VideoContext>(opt => opt.UseInMemoryDatabase("VideoList"));
             services.AddDbContext<DataContext>(opt =>
-                opt.UseMySQL(Configuration.GetConnectionString("DefaultConnection")));
+                opt.UseMySQL(Configuration.GetConnectionString("HomeConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-            //services.AddAutoMapper();
-            var mappingConfig = new MapperConfiguration(mc =>
-            {
-                mc.AddProfile(new MappingProfile());
-            });
-            IMapper mapper = mappingConfig.CreateMapper();
-            services.AddSingleton(mapper);
+            services.AddAutoMapper();
+            //var mappingConfig = new MapperConfiguration(mc =>
+            //{
+            //    mc.AddProfile(new MappingProfile());
+            //});
+            //IMapper mapper = mappingConfig.CreateMapper();
+            //services.AddSingleton(mapper);
 
             var appSettingsSection = Configuration.GetSection("AppSettings");
             services.Configure<AppSettings>(appSettingsSection);
