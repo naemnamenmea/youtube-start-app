@@ -5,7 +5,6 @@ namespace CoreWebAPI.Entities
 {
     public class Video
     {
-        [Key]
         public string id { get; set; }
         public string title { get; set; }
         public string thumbnail { get; set; }
