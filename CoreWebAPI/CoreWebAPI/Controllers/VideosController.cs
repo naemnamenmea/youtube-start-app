@@ -2,12 +2,14 @@
 using CoreWebAPI.Entities;
 using CoreWebAPI.Helpers;
 using CoreWebAPI.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -87,6 +89,19 @@ namespace CoreWebAPI.Controllers
             return Ok(videoItem);
         }
 
+        [Authorize]
+        [HttpGet("vote")]
+        public async Task<ActionResult<string>> Vote([FromQuery]string id, [FromQuery]double vote)
+        {
+            // получить текущего пользователя
+            var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+            return userId;
+            // проверяем ставил ли он оценку данному видео раньше
+            // если да, то вернуть сообщение об ошибке
+            // если нет, то поставить оценку и вернуть обновленное значение
+        }
+
         // POST api/Videos
         [HttpPost]
         public async Task<ActionResult<Video>> Post([FromBody] Video newVideo) //async Task<ActionResult<
@@ -136,7 +151,7 @@ namespace CoreWebAPI.Controllers
 
         // PUT api/Videos/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTodoItem([FromRoute] string id, [FromBody] Video video)
+        public async Task<IActionResult> Put([FromRoute] string id, [FromBody] Video video)
         {
             if (id != video.id)
             {

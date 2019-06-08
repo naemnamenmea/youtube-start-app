@@ -1,7 +1,7 @@
 import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
 import { VideoService } from 'src/app/_services/video/video.service';
 import { ToastrService } from 'ngx-toastr';
-import { DatePipe } from '@angular/common' 
+import { DatePipe } from '@angular/common'
 import { HttpClient } from '@angular/common/http';
 import { ConfirmRemoveVideoComponent } from 'src/app/_components/confirm-remove-video/confirm-remove-video.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
@@ -22,12 +22,18 @@ export class VideoListBodyComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    
+
   }
 
   openDelConfirm(video: Video) {
     const modalRef = this._modalService.open(ConfirmRemoveVideoComponent);
     modalRef.componentInstance.video = video;
   }
-  
+
+  vote(videoId: string) {
+    var vote: number = 228;
+    this.service.sendVote(videoId, vote).toPromise().then(res => console.log(res))
+      .catch(err => console.log(err));
+  }
+
 }
