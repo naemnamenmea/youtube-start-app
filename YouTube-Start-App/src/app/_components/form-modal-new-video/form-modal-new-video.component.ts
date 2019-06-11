@@ -36,15 +36,16 @@ export class FormModalNewVideoComponent implements OnInit {
       let url = this.net.getParamsURL(this.myForm.get('url').value);
       if (url != this.currentUrl) {
         this.currentUrl = url;
-        let videoId = this.net.getValueByKeyFromURL(url, "v"); // Обработать исключение query == null
-        if (videoId.length != 11)
+        let videoUrl = this.net.getValueByKeyFromURL(url, "v"); // Обработать исключение query == null
+        if (videoUrl.length != 11)
           throw 'invalid id';
-        this.service.getNoembedYoutubeVideo(videoId)
+        this.service.getNoembedYoutubeVideo(videoUrl)
           .toPromise().then((noembedItem) => {
             if (noembedItem.hasOwnProperty('error'))
               throw 'invalid id';
             this.video = {
-              id: videoId,
+              id: 0,
+              url: videoUrl,
               title: noembedItem['title'],
               grade: null,
               posted_date: new Date(),

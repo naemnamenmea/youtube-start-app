@@ -1,5 +1,6 @@
 export class Video {
-    id : string;
+    id: number;
+    url : string;
     title: string;
     posted_date: Date;
     grade: number;

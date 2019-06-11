@@ -32,16 +32,12 @@ export class VideoService {
       });
   }
 
-  existsVideo(id: string) {
-    return true;
-  }
-
   refreshList() {
     this.http.get(this.videosAPI)
       .subscribe(res => this.videoList = res as Video[]);
   }
 
-  sendVote(videoId: string, vote: number) {
+  sendVote(videoId: number, vote: number) {
     return this.http.get(this.videosAPI + '/' + this.voteAction + '?id=' + videoId + '&vote=' + vote);
   }
 
@@ -53,7 +49,7 @@ export class VideoService {
     return this.http.get('https://noembed.com/embed?url=https://www.youtube.com/watch?v=' + videoId);
   }
 
-  removeVideo(videoId: string) {
+  removeVideo(videoId: number) {
     return this.http.delete(this.videosAPI + '/' + videoId);
   }
 

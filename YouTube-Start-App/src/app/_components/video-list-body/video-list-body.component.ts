@@ -30,7 +30,7 @@ export class VideoListBodyComponent implements OnInit {
     modalRef.componentInstance.video = video;
   }
 
-  vote(videoId: string) {
+  vote(videoId: number) {
     var vote: number = 228;
     this.service.sendVote(videoId, vote).toPromise().then(res => console.log(res))
       .catch(err => console.log(err));

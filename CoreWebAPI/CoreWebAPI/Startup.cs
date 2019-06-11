@@ -40,7 +40,7 @@ namespace CoreWebAPI
             });
             //services.AddDbContext<VideoContext>(opt => opt.UseInMemoryDatabase("VideoList"));
             services.AddDbContext<DataContext>(opt =>
-                opt.UseMySql(Configuration.GetConnectionString("HomeConnection")));
+                opt.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddAutoMapper();
             //var mappingConfig = new MapperConfiguration(mc =>
@@ -107,6 +107,7 @@ namespace CoreWebAPI
                 app.UseHsts();
             }
 
+            app.UseAuthentication();
             app.UseCors();
             app.UseMiddleware<ApiDiagnosticsMiddleware>();
             app.UseHttpsRedirection();

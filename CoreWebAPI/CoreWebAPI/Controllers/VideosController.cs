@@ -77,7 +77,7 @@ namespace CoreWebAPI.Controllers
 
         // GET api/Videos/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Video>> Get([FromRoute] string id)
+        public async Task<ActionResult<Video>> Get([FromRoute] int id)
         {
             var videoItem = await _videoService.FindVideoAsync(id);
 
@@ -106,10 +106,10 @@ namespace CoreWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Video>> Post([FromBody] Video newVideo) //async Task<ActionResult<
         {
-            Video video = await _videoService.FindVideoAsync(newVideo.id);
+            Video video = await _videoService.FindVideoAsync(newVideo.url);
             if (video != null)
                 return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status409Conflict,
-                    "Видео \"" + video.title + "\" уже существует");
+                    new { message = "Видео \"" + video.title + "\" уже существует" });
 
             _videoService.AddVideoAsync(newVideo);
             await _videoService.SaveChangesAsync();
@@ -150,7 +150,7 @@ namespace CoreWebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromRoute] string id, [FromBody] Video video)
         {
-            if (id != video.id)
+            if (id != video.url)
             {
                 return BadRequest();
             }
@@ -163,7 +163,7 @@ namespace CoreWebAPI.Controllers
 
         // DELETE api/Videos/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete([FromRoute] string id)
+        public async Task<IActionResult> Delete([FromRoute] int id)
         {
             var video = await _videoService.FindVideoAsync(id);
 

@@ -27,9 +27,14 @@ namespace CoreWebAPI.Services
             _context.Entry(video).State = EntityState.Modified;
         }
 
-        public Task<Video> FindVideoAsync(string id)
+        public Task<Video> FindVideoAsync(int id)
         {
             return _context.VideoItems.FindAsync(id);
+        }
+
+        public Task<Video> FindVideoAsync(string url)
+        {
+            return _context.VideoItems.FirstOrDefaultAsync(v => v.url == url);
         }
 
         public async Task<ActionResult<IEnumerable<Video>>> GetLatestVideosAsync()
@@ -63,7 +68,8 @@ namespace CoreWebAPI.Services
         Task<ActionResult<IEnumerable<Video>>> GetTopVideosAsync(int num);
         Task<ActionResult<IEnumerable<Video>>> GetLatestVideosAsync();
         Task<ActionResult<IEnumerable<Video>>> GetVideosAsync();
-        Task<Video> FindVideoAsync(string id);
+        Task<Video> FindVideoAsync(int id);
+        Task<Video> FindVideoAsync(string url);
         void AddVideoAsync(Video video);
         Task SaveChangesAsync();
         void ChangeVideoState(Video video, EntityState modified);

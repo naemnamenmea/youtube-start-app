@@ -31,13 +31,14 @@ export class VideoListHeaderComponent implements OnInit {
 
   openFormModal() {
     const modalRef = this.modalService.open(FormModalNewVideoComponent);
-    let alert_title='Добавление видео...';
+    let alert_title = 'Добавление видео...';
     modalRef.result.then((video: Video) => {
+      if(video == null) throw '';
       this.videoService.addVideo(video).
         toPromise().then(res => {
           this.toastr.success(res as string, alert_title);
           this.videoService.refreshList();
-        }).catch(err => {                    
+        }).catch(err => {
           this.toastr.warning(err, alert_title);
         });
     }, reason => null).catch((error) => {
