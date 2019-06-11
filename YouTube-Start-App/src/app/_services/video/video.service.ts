@@ -7,7 +7,7 @@ import { environment } from 'src/environments/environment';
   providedIn: 'root'
 })
 export class VideoService {
-
+  
   video: Video;
   videoList: Video[];
   readonly videosController = 'videos';

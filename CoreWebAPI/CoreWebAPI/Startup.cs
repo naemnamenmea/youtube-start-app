@@ -108,6 +108,7 @@ namespace CoreWebAPI
             }
 
             app.UseCors();
+            app.UseMiddleware<ApiDiagnosticsMiddleware>();
             app.UseHttpsRedirection();
             app.UseMvc();
         }

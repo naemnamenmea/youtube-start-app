@@ -106,9 +106,6 @@ namespace CoreWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Video>> Post([FromBody] Video newVideo) //async Task<ActionResult<
         {
-
-            //_logger.LogInformation(CreateLogMsg(ref videoId));
-
             Video video = await _videoService.FindVideoAsync(newVideo.id);
             if (video != null)
                 return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status409Conflict,

@@ -41,7 +41,7 @@ namespace CoreWebAPI.Controllers
         }
 
         // GET: api/Users
-       [HttpGet]
+        [HttpGet]
         public IActionResult GetAll()
         {
             var users =  _userService.GetAll();
