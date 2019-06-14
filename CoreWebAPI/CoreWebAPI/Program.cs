@@ -1,4 +1,5 @@
-﻿using CoreWebAPI.Entities;
+﻿using CoreWebAPI.Dtos;
+using CoreWebAPI.Entities;
 using CoreWebAPI.Helpers;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
@@ -14,13 +15,38 @@ namespace CoreWebAPI
 
             using (DataContext db = new DataContext())
             {
-                // создаем два объекта User
-                User user1 = new User { Name = "Tom", Age = 33 };
-                User user2 = new User { Name = "Sam", Age = 26 };
+                UserDto admin = new UserDto {
+                    Id = 1,
+                    Username = "admin",
+                    Password = "admin"
+                };
 
-                // добавляем их в бд
-                db.Users.Add(user1);
-                db.Users.Add(user2);
+
+                var user = _mapper.Map<User>(userDto);
+                _userService.Create(user, userDto.Password);
+                db.Users.Add(admin);
+
+                _context = context;
+
+                if (_context.VideoItems.Count() == 0)
+                {
+                    _context.VideoItems.Add(new Video
+                    {
+                        id = "l58dipKGTJE",
+                        title = "animal",
+                        postedDate = new DateTime(),
+                        avScore = 0.3f
+                    });
+                    _context.VideoItems.Add(new Video
+                    {
+                        id = "LEHny_pGtL0",
+                        title = "pain",
+                        postedDate = new DateTime(),
+                        avScore = 0.7f
+                    });
+                    _context.SaveChanges();
+                }
+
                 db.SaveChanges();
 
             }

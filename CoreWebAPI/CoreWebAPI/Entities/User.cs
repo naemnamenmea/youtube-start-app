@@ -6,6 +6,7 @@ namespace CoreWebAPI.Entities
     {
         [Key]
         public int Id { get; set; }
+        [Required]
         public string Username { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
