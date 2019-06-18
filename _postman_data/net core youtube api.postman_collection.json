@@ -1,0 +1,172 @@
+{
+	"info": {
+		"_postman_id": "f33e1190-7aba-49a7-ad12-e7fb3e87d082",
+		"name": "net core youtube api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{}"
+				},
+				"url": {
+					"raw": "https://localhost:44326/api/users/authenticate",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44326",
+					"path": [
+						"api",
+						"users",
+						"authenticate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "register",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44326/api/users/register",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44326",
+					"path": [
+						"api",
+						"users",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44326/api/users",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44326",
+					"path": [
+						"api",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get vote",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [
+					{
+						"key": "TEST_KEY",
+						"value": "TEST_KEY_VALUE",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "BODY-TEXT"
+				},
+				"url": {
+					"raw": "https://localhost:44326/api/videos/vote?id=BKQlqjBDF8Q&vote=5",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44326",
+					"path": [
+						"api",
+						"videos",
+						"vote"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "BKQlqjBDF8Q"
+						},
+						{
+							"key": "vote",
+							"value": "5"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get videos",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44326/api/videos",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44326",
+					"path": [
+						"api",
+						"videos"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "675a6453-97a9-472a-8a23-0cf3e4bfcdd7",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "cb89d457-49b0-414c-b96b-7c8b73e81958",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "4d6e52cf-cad4-4ea5-a63d-46562f2b7efc",
+			"key": "local_var",
+			"value": "local",
+			"type": "string"
+		}
+	]
+}
