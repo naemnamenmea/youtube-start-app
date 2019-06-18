@@ -58,37 +58,14 @@ namespace CoreWebAPI.Controllers
             {
                 return BadRequest(new { message = "Неверное имя пользователя или пароль" });
             }
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddMinutes(15),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-
-            // return basic user info (without password) and token to store client side
-            return Ok(new
-            {
-                Id = user.Id,
-                Username = user.Username,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                Token = tokenString
-            });
+            return /**/;
         }
 
         [AllowAnonymous]
         [HttpPost("register")]
         public IActionResult Register([FromBody] UserDto userDto)
         {
-            var user = _mapper.Map<User>(userDto);
+            var user = _mapper.Map<ApplicationUser>(userDto);
 
             try
             {
@@ -117,7 +94,7 @@ namespace CoreWebAPI.Controllers
         public IActionResult Update(int id, [FromBody] UserDto userDto)
         {
             // map dto to entity and set id
-            var user = _mapper.Map<User>(userDto);
+            var user = _mapper.Map<ApplicationUser>(userDto);
             user.Id = id;
 
             try

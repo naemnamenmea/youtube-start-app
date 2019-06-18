@@ -8,11 +8,11 @@ namespace CoreWebAPI.Services
 {
     public interface IUserService
     {
-        User Authenticate(string username, string password);
-        IEnumerable<User> GetAll();
-        User GetById(int id);
-        User Create(User user, string password);
-        void Update(User user, string password = null);
+        ApplicationUser Authenticate(string username, string password);
+        IEnumerable<ApplicationUser> GetAll();
+        ApplicationUser GetById(int id);
+        ApplicationUser Create(ApplicationUser user, string password);
+        void Update(ApplicationUser user, string password = null);
         void Delete(int id);
     }
 
@@ -25,7 +25,7 @@ namespace CoreWebAPI.Services
             _context = context;
         }
 
-        public User Authenticate(string username, string password)
+        public ApplicationUser Authenticate(string username, string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 return null;
@@ -44,17 +44,17 @@ namespace CoreWebAPI.Services
             return user;
         }
 
-        public IEnumerable<User> GetAll()
+        public IEnumerable<ApplicationUser> GetAll()
         {
             return _context.Users;
         }
 
-        public User GetById(int id)
+        public ApplicationUser GetById(int id)
         {
             return _context.Users.Find(id);
         }
 
-        public User Create(User user, string password)
+        public ApplicationUser Create(ApplicationUser user, string password)
         {
             // validation
             if (string.IsNullOrWhiteSpace(password))
@@ -75,7 +75,7 @@ namespace CoreWebAPI.Services
             return user;
         }
 
-        public void Update(User userParam, string password = null)
+        public void Update(ApplicationUser userParam, string password = null)
         {
             var user = _context.Users.Find(userParam.Id);
 

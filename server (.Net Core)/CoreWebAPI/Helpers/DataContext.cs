@@ -11,6 +11,11 @@ namespace CoreWebAPI.Helpers
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         public DbSet<Video> VideoItems { get; set; }
-        public DbSet<User> Users { get; set; }
+        public DbSet<ApplicationUser> Users { get; set; }
+        /*
+         * Charset/Collation: utf8mb4 / utf8mb4_0900_ai_ci
+         * Engine: InnoDB
+         */
+        public DbSet<Grade> Grades { get; set; }
     }
 }

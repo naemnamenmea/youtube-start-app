@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using CoreWebAPI.Entities;
 using CoreWebAPI.Helpers;
 using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 //using Microsoft.EntityFrameworkCore;
@@ -40,7 +42,7 @@ namespace CoreWebAPI
             });
             //services.AddDbContext<VideoContext>(opt => opt.UseInMemoryDatabase("VideoList"));
             services.AddDbContext<DataContext>(opt =>
-                opt.UseMySql(Configuration.GetConnectionString("HomeConnection")));
+                opt.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddAutoMapper();
             //var mappingConfig = new MapperConfiguration(mc =>
@@ -96,21 +98,29 @@ namespace CoreWebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
+            DataContext context, UserManager<ApplicationUser> userManager)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
                 app.UseHsts();
             }
 
-            app.UseAuthentication();
             app.UseCors();
             app.UseMiddleware<ApiDiagnosticsMiddleware>();
             app.UseHttpsRedirection();
+            //app.UseStaticFiles();
+            //app.UseCookiePolicy();
+
+            app.UseAuthentication();
+
+            DbSeeder.SeedDb(context, userManager);
+
             app.UseMvc();
         }
     }
