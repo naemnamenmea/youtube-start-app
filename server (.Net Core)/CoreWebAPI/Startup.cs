@@ -61,7 +61,7 @@ namespace CoreWebAPI
             });
 
             services.AddDbContext<DataContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+                options.UseMySql(Configuration.GetConnectionString("HomeConnection")));
             services.AddDefaultIdentity<User>()
                 //.AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<DataContext>();

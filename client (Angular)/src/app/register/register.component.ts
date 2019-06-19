@@ -46,9 +46,12 @@ export class RegisterComponent implements OnInit {
     if (this.registerForm.invalid) {
       return;
     }
-    this.loading = true;    
-    var user:RegUser = this.registerForm.value;
-    user.PasswordConfirmation = user.Password;
+    this.loading = true;
+    var user: RegUser = {
+      UserName: this.registerForm.controls.username.value,
+      Password: this.registerForm.controls.password.value,
+      PasswordConfirmation: this.registerForm.controls.password.value
+    };
     this.userService.register(user)
       .pipe(first())
       .subscribe(
