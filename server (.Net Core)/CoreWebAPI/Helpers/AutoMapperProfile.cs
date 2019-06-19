@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using CoreWebAPI.Dtos;
 using CoreWebAPI.Entities;
 
 namespace CoreWebAPI.Helpers
@@ -8,8 +7,8 @@ namespace CoreWebAPI.Helpers
     {
         public AutoMapperProfile()
         {
-            CreateMap<ApplicationUser, UserDto>();
-            CreateMap<UserDto, ApplicationUser>();
+            //CreateMap<ApplicationUser, UserDto>();
+            //CreateMap<UserDto, ApplicationUser>();
         }
     }
 }

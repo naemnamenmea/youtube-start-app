@@ -9,10 +9,7 @@ namespace CoreWebAPI.Services
     public interface IUserService
     {
         ApplicationUser Authenticate(string username, string password);
-        IEnumerable<ApplicationUser> GetAll();
         ApplicationUser GetById(int id);
-        ApplicationUser Create(ApplicationUser user, string password);
-        void Update(ApplicationUser user, string password = null);
         void Delete(int id);
     }
 
@@ -30,82 +27,13 @@ namespace CoreWebAPI.Services
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 return null;
 
-            var user = _context.Users.SingleOrDefault(x => x.Username == username);
-
-            // check if username exists
-            if (user == null)
-                return null;
-
-            // check if password is correct
-            if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
-                return null;
-
-            // authentication successful
-            return user;
-        }
-
-        public IEnumerable<ApplicationUser> GetAll()
-        {
-            return _context.Users;
+            return null;
         }
 
         public ApplicationUser GetById(int id)
         {
-            return _context.Users.Find(id);
-        }
-
-        public ApplicationUser Create(ApplicationUser user, string password)
-        {
-            // validation
-            if (string.IsNullOrWhiteSpace(password))
-                throw new AppException("Password is required");
-
-            if (_context.Users.Any(x => x.Username == user.Username))
-                throw new AppException("Имя пользователя \"" + user.Username + "\" уже занято");
-
-            byte[] passwordHash, passwordSalt;
-            CreatePasswordHash(password, out passwordHash, out passwordSalt);
-
-            user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
-
-            _context.Users.Add(user);
-            _context.SaveChanges();
-
-            return user;
-        }
-
-        public void Update(ApplicationUser userParam, string password = null)
-        {
-            var user = _context.Users.Find(userParam.Id);
-
-            if (user == null)
-                throw new AppException("User not found");
-
-            if (userParam.Username != user.Username)
-            {
-                // username has changed so check if the new username is already taken
-                if (_context.Users.Any(x => x.Username == userParam.Username))
-                    throw new AppException("Имя пользователя " + userParam.Username + " уже занято");
-            }
-
-            // update user properties
-            user.FirstName = userParam.FirstName;
-            user.LastName = userParam.LastName;
-            user.Username = userParam.Username;
-
-            // update password if it was entered
-            if (!string.IsNullOrWhiteSpace(password))
-            {
-                byte[] passwordHash, passwordSalt;
-                CreatePasswordHash(password, out passwordHash, out passwordSalt);
-
-                user.PasswordHash = passwordHash;
-                user.PasswordSalt = passwordSalt;
-            }
-
-            _context.Users.Update(user);
-            _context.SaveChanges();
+            //return _context.Users.Find(id);
+            return null;
         }
 
         public void Delete(int id)
