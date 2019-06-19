@@ -20,8 +20,7 @@ namespace CoreWebAPI.Helpers
         public async Task InvokeAsync(HttpContext context)
         {
             _logger.LogDebug("::::TEST_BEGIN::::");
-            _logger.LogDebug(context.Request.Headers["Authorization"],
-                context.Request.Headers["TEST_KEY"]);
+            _logger.LogDebug("Authorization: \"" + context.Request.Headers["Authorization"] + "\"");
             _logger.LogDebug("::::TEST_END::::");
 
             await _next(context);

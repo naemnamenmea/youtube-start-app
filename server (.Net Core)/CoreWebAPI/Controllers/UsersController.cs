@@ -116,8 +116,7 @@ namespace CoreWebAPI.Controllers
 
                 if (resault.Succeeded)
                 {
-                    await _signInManager.SignInAsync(user, false);
-                    return Ok(GetToken(user));
+                    return Ok();
                 }
                 else
                 {
