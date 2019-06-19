@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
 using Microsoft.Extensions.Logging;
-using System;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CoreWebAPI.Helpers

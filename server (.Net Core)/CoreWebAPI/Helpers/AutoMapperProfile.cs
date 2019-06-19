@@ -7,8 +7,7 @@ namespace CoreWebAPI.Helpers
     {
         public AutoMapperProfile()
         {
-            //CreateMap<ApplicationUser, UserDto>();
-            //CreateMap<UserDto, ApplicationUser>();
+            CreateMap<RegisterUserModel, User>();
         }
     }
 }

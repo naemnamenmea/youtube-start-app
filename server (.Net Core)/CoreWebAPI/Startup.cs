@@ -9,6 +9,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System;
 
 namespace CoreWebAPI
 {
@@ -62,12 +66,32 @@ namespace CoreWebAPI
                 //.AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<DataContext>();
 
+            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]));
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(config =>
+            {
+                config.RequireHttpsMetadata = false;
+                config.SaveToken = true;
+                config.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = signingKey,
+                    ValidateIssuer = false,
+                    ClockSkew = TimeSpan.Zero,
+                    ValidateAudience = false,
+                    ValidateLifetime = true
+                };
+            });
+
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env/*,
-            DataContext context, UserManager<ApplicationUser> userManager*/)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
+            DataContext context, UserManager<User> userManager)
         {
             if (env.IsDevelopment())
             {
@@ -88,7 +112,7 @@ namespace CoreWebAPI
 
             app.UseAuthentication();
 
-            //DbSeeder.SeedDb(context, userManager);
+            DbSeeder.SeedDb(context, userManager);
 
             app.UseMvc();
         }

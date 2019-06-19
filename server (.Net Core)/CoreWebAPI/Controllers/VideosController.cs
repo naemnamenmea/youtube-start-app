@@ -75,8 +75,6 @@ namespace CoreWebAPI.Controllers
             return await _videoService.GetLatestVideosAsync();
         }
 
-        // GET: api/Videos
-        //[Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Video>>> Get()
         {
@@ -112,6 +110,7 @@ namespace CoreWebAPI.Controllers
         }
 
         // POST api/Videos
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Video>> Post([FromBody] Video newVideo) //async Task<ActionResult<
         {
@@ -156,6 +155,7 @@ namespace CoreWebAPI.Controllers
         //}
 
         // PUT api/Videos/5
+        [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromRoute] string id, [FromBody] Video video)
         {
@@ -171,6 +171,7 @@ namespace CoreWebAPI.Controllers
         }
 
         // DELETE api/Videos/5
+        [Authorize]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
