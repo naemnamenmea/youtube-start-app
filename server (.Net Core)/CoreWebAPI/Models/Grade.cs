@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace CoreWebAPI.Entities
+namespace CoreWebAPI.Models
 {
     public class Grade
     {

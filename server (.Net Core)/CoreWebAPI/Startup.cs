@@ -1,12 +1,11 @@
 ﻿using AutoMapper;
-using CoreWebAPI.Entities;
+using CoreWebAPI.Models;
 using CoreWebAPI.Helpers;
 using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +22,7 @@ namespace CoreWebAPI
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {            
+        {
             services.AddCors(options =>
             {
                 options.AddDefaultPolicy(builder =>
@@ -58,8 +57,8 @@ namespace CoreWebAPI
             });
 
             services.AddDbContext<DataContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("HomeConnection")));            
-            services.AddDefaultIdentity<IdentityUser>()
+                options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDefaultIdentity<User>()
                 //.AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<DataContext>();
 
@@ -67,8 +66,8 @@ namespace CoreWebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env,
-            DataContext context, UserManager<ApplicationUser> userManager)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env/*,
+            DataContext context, UserManager<ApplicationUser> userManager*/)
         {
             if (env.IsDevelopment())
             {
@@ -81,6 +80,7 @@ namespace CoreWebAPI
                 app.UseHsts();
             }
 
+            app.UseMiddleware<ApiDiagnosticsMiddleware>();
             app.UseCors();
             app.UseHttpsRedirection();
             app.UseStaticFiles();
@@ -88,8 +88,7 @@ namespace CoreWebAPI
 
             app.UseAuthentication();
 
-            app.UseMiddleware<ApiDiagnosticsMiddleware>();
-            DbSeeder.SeedDb(context, userManager);
+            //DbSeeder.SeedDb(context, userManager);
 
             app.UseMvc();
         }

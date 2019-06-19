@@ -1,12 +1,13 @@
-﻿using CoreWebAPI.Entities;
+﻿using CoreWebAPI.Models;
 using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
 namespace CoreWebAPI.Helpers
 {
 
-    public class DataContext : IdentityDbContext
+    public class DataContext : IdentityDbContext<User>
     {
         public readonly NoEmbedService _noembedService;
 
@@ -14,12 +15,7 @@ namespace CoreWebAPI.Helpers
                 : base(options)
         { }
 
-        public DbSet<Video> VideoItems { get; set; }
-        //public DbSet<ApplicationUser> Users { get; set; }
-        /*
-         * Charset/Collation: utf8mb4 / utf8mb4_0900_ai_ci
-         * Engine: InnoDB
-         */
+        public DbSet<Video> VideoItems { get; set; }        
         public DbSet<Grade> Grades { get; set; }
     }
 }

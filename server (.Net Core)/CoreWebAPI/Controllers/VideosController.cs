@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CoreWebAPI.Entities;
+using CoreWebAPI.Models;
 using CoreWebAPI.Helpers;
 using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -76,6 +76,7 @@ namespace CoreWebAPI.Controllers
         }
 
         // GET: api/Videos
+        //[Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Video>>> Get()
         {
@@ -103,7 +104,7 @@ namespace CoreWebAPI.Controllers
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             // получить текущего пользователя
-            ApplicationUser user = _userService.GetById(int.Parse(userId));
+            User user = _userService.GetById(int.Parse(userId));
             // проверяем ставил ли он оценку данному видео раньше
             // если да, то вернуть сообщение об ошибке
             // если нет, то поставить оценку и вернуть обновленное значение

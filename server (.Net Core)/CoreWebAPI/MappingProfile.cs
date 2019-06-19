@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CoreWebAPI.Entities;
+using CoreWebAPI.Models;
 using Newtonsoft.Json.Linq;
 
 namespace CoreWebAPI

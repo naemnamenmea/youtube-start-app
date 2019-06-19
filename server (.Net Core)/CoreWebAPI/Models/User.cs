@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 
-namespace CoreWebAPI.Entities
+namespace CoreWebAPI.Models
 {
-    public class ApplicationUser : IdentityUser<int>
+    public class User : IdentityUser
     {
 
     }

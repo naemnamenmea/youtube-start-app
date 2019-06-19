@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CoreWebAPI.Entities;
+using CoreWebAPI.Models;
 using CoreWebAPI.Helpers;
 using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +12,8 @@ using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Threading.Tasks;
+using System;
+using System.Linq;
 
 namespace CoreWebAPI.Controllers
 {
@@ -24,67 +26,76 @@ namespace CoreWebAPI.Controllers
         private ILogger _logger;
         private IUserService _userService;
         private IMapper _mapper;
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<User> _userManager;
+        private readonly SignInManager<User> _signInManager;
 
         public UsersController(
             IMapper mapper,
             ILogger<VideosController> logger,
             IUserService userv,
-            UserManager<ApplicationUser> userManager)
+            UserManager<User> userManager,
+            SignInManager<User> signInManager)
         {
             _logger = logger;
             _userService = userv;
             _mapper = mapper;
             _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         [AllowAnonymous]
-        [HttpPost("authenticate")]
-        public IActionResult Authenticate([FromBody] ApplicationUser userDto)
+        [ValidateAntiForgeryToken]
+        [HttpPost("login")]
+        public async Task<IActionResult> Login([FromBody] UserAuth user)
         {
-            //var user = _userService.Authenticate(userDto.Username, userDto.Password);
-            //if (user == null)
-            //{
-            //    return BadRequest(new { message = "Неверное имя пользователя или пароль" });
-            //}
-            return null;
+            var resault = await _signInManager.PasswordSignInAsync(user.UserName, user.Password, user.RememberMe, false);
+
+            if(resault.Succeeded)
+            {
+                return Ok();
+            }
+            return BadRequest("Неправильный логин и (или) пароль");
         }
 
         [HttpPost]
+        [AllowAnonymous]
         [Route("register")]
-        public async Task<IActionResult> Register(string email, string password, string confirmPassword)
+        public async Task<IActionResult> Register([FromBody]UserReg regModel)
         {
-            if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(password))
+            User user = new User
             {
-                return BadRequest("email or password is null");
-            }
-
-            if (password != confirmPassword)
-            {
-                return BadRequest("Passwords don't match!");
-            }
-
-            var newUser = new ApplicationUser
-            {
-                UserName = email
+                UserName = regModel.UserName
             };
 
-            IdentityResult userCreationResult = null;
             try
             {
-                userCreationResult = await _userManager.CreateAsync(newUser, password);
+                var resault = await _userManager.CreateAsync(user, regModel.Password);
+
+                if (resault.Succeeded)
+                {
+                    await _signInManager.SignInAsync(user, false);
+                    return Ok();
+                }
+                else
+                {
+                    return BadRequest(resault.Errors);
+                }
             }
-            catch (SqlException e)
+            catch (Exception e)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, e);
+                _logger.LogError("&&&&&&&&&&&&&&&&&&" + e);
             }
 
-            if (!userCreationResult.Succeeded)
-            {
-                return BadRequest(userCreationResult.Errors);
-            }
+            return StatusCode(StatusCodes.Status500InternalServerError);
+        }
 
-            return Ok("Registration completed");
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("logoff")]
+        public async Task<IActionResult> LogOff()
+        {
+            await _signInManager.SignOutAsync();
+            return Ok();
         }
 
         // GET: api/Users/5
@@ -92,16 +103,16 @@ namespace CoreWebAPI.Controllers
         public IActionResult GetById(int id)
         {
             var user = _userService.GetById(id);
-            var userDto = _mapper.Map<ApplicationUser>(user);
+            var userDto = _mapper.Map<User>(user);
             return Ok(userDto);
         }
 
         // PUT: api/Users/5
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] ApplicationUser userDto)
+        public IActionResult Update(string id, [FromBody] User userDto)
         {
             // map dto to entity and set id
-            var user = _mapper.Map<ApplicationUser>(userDto);
+            var user = _mapper.Map<User>(userDto);
             user.Id = id;
 
             try

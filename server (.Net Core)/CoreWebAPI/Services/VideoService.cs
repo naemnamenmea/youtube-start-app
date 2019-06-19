@@ -1,4 +1,4 @@
-﻿using CoreWebAPI.Entities;
+﻿using CoreWebAPI.Models;
 using CoreWebAPI.Helpers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;

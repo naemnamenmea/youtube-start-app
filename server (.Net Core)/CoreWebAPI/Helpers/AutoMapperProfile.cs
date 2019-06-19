@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using CoreWebAPI.Entities;
+using CoreWebAPI.Models;
 
 namespace CoreWebAPI.Helpers
 {

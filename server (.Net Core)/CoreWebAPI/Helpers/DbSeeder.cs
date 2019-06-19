@@ -1,4 +1,4 @@
-﻿using CoreWebAPI.Entities;
+﻿using CoreWebAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -9,7 +9,7 @@ namespace CoreWebAPI.Helpers
 {
     public class DbSeeder
     {
-        public static void SeedDb(DataContext context, UserManager<ApplicationUser> userManager)
+        public static void SeedDb(DataContext context, UserManager<User> userManager)
         {
             SeedUsers(userManager);
             SeedVideos(context);
@@ -24,9 +24,9 @@ namespace CoreWebAPI.Helpers
             context.SaveChanges();
         }
 
-        private static void SeedUsers(UserManager<ApplicationUser> userManager)
+        private static void SeedUsers(UserManager<User> userManager)
         {
-            ApplicationUser admin = new ApplicationUser
+            User admin = new User
             {
                 UserName = "admin"
             };

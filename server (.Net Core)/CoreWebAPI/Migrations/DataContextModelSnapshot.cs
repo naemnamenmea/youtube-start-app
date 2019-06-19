@@ -17,7 +17,7 @@ namespace CoreWebAPI.Migrations
                 .HasAnnotation("ProductVersion", "2.1.11-servicing-32099")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
-            modelBuilder.Entity("CoreWebAPI.Entities.Grade", b =>
+            modelBuilder.Entity("CoreWebAPI.Models.Grade", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
@@ -31,7 +31,7 @@ namespace CoreWebAPI.Migrations
                     b.ToTable("Grades");
                 });
 
-            modelBuilder.Entity("CoreWebAPI.Entities.Video", b =>
+            modelBuilder.Entity("CoreWebAPI.Models.Video", b =>
                 {
                     b.Property<int>("id")
                         .ValueGeneratedOnAdd();

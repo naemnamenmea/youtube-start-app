@@ -1,4 +1,4 @@
-﻿using CoreWebAPI.Entities;
+﻿using CoreWebAPI.Models;
 using CoreWebAPI.Helpers;
 using System;
 using System.Collections.Generic;
@@ -8,8 +8,8 @@ namespace CoreWebAPI.Services
 {
     public interface IUserService
     {
-        ApplicationUser Authenticate(string username, string password);
-        ApplicationUser GetById(int id);
+        User Authenticate(string username, string password);
+        User GetById(int id);
         void Delete(int id);
     }
 
@@ -22,7 +22,7 @@ namespace CoreWebAPI.Services
             _context = context;
         }
 
-        public ApplicationUser Authenticate(string username, string password)
+        public User Authenticate(string username, string password)
         {
             if (string.IsNullOrEmpty(username) || string.IsNullOrEmpty(password))
                 return null;
@@ -30,7 +30,7 @@ namespace CoreWebAPI.Services
             return null;
         }
 
-        public ApplicationUser GetById(int id)
+        public User GetById(int id)
         {
             //return _context.Users.Find(id);
             return null;
