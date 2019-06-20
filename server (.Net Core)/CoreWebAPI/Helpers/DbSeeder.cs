@@ -1,4 +1,5 @@
-﻿using CoreWebAPI.Models;
+﻿using AutoMapper;
+using CoreWebAPI.Models;
 using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
@@ -9,31 +10,34 @@ namespace CoreWebAPI.Helpers
 {
     public class DbSeeder
     {
-        public static void SeedDb(DataContext context, UserManager<User> userManager)
+        public static void SeedDb(DataContext context, UserManager<User> userManager, IMapper mapper)
         {
-            SeedUsers(userManager);
+            SeedUsers(userManager, mapper);
             SeedVideos(context);
         }
 
         private static void SeedVideos(DataContext context)
         {
             context.Database.EnsureCreated();
-            /*
-             * Adding entities
-             */
+            string onInit = "on_init";
+            Video video = new Video();
+            video.Thumbnail = onInit;
+            video.Url = onInit;
+            video.Title = onInit;
+            context.VideoItems.Add(video);
             context.SaveChanges();
         }
 
-        private static void SeedUsers(UserManager<User> userManager)
+        private static void SeedUsers(UserManager<User> userManager, IMapper mapper)
         {
-            User admin = new User
-            {
-                UserName = "admin"
+            var users = new List<Tuple<User, string>>() {
+                new Tuple<User,string>(new User("admin"), "tesT321!"),
+                new Tuple<User,string>(new User("test"), "tesT123!")
             };
 
-            //userManager.fid
-            userManager.CreateAsync(admin, "admin").Wait();
-            userManager.AddToRoleAsync(admin,"Admin");
+            foreach (var user in users) {
+                userManager.CreateAsync(user.Item1, user.Item2).Wait();
+            }
         }
     }
 }

@@ -97,12 +97,11 @@ namespace CoreWebAPI.Controllers
 
         [Authorize]
         [HttpGet("vote")]
-        public async Task<ActionResult<string>> Vote([FromQuery]string id, [FromQuery]double vote)
+        public async Task<ActionResult<string>> Vote([FromQuery]int id, [FromQuery]double vote)
         {
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
-            // получить текущего пользователя
-            User user = _userService.GetById(int.Parse(userId));
+            User user = _userService.GetById(userId);
             // проверяем ставил ли он оценку данному видео раньше
             // если да, то вернуть сообщение об ошибке
             // если нет, то поставить оценку и вернуть обновленное значение
@@ -114,10 +113,10 @@ namespace CoreWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Video>> Post([FromBody] Video newVideo) //async Task<ActionResult<
         {
-            Video video = await _videoService.FindVideoAsync(newVideo.url);
+            Video video = await _videoService.FindVideoAsync(newVideo.Url);
             if (video != null)
                 return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status409Conflict,
-                    new { message = "Видео \"" + video.title + "\" уже существует" });
+                    new { message = "Видео \"" + video.Title + "\" уже существует" });
 
             _videoService.AddVideoAsync(newVideo);
             await _videoService.SaveChangesAsync();
@@ -159,7 +158,7 @@ namespace CoreWebAPI.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromRoute] string id, [FromBody] Video video)
         {
-            if (id != video.url)
+            if (id != video.Url)
             {
                 return BadRequest();
             }

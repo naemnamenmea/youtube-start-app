@@ -2,7 +2,7 @@
 using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
+using System.Configuration;
 
 namespace CoreWebAPI.Helpers
 {
@@ -12,10 +12,22 @@ namespace CoreWebAPI.Helpers
         public readonly NoEmbedService _noembedService;
 
         public DataContext(DbContextOptions<DataContext> options)
-                : base(options)
+            : base(options)
         { }
 
-        public DbSet<Video> VideoItems { get; set; }        
+        public DataContext(string connectionString)
+            :base(GetOptions(connectionString))
+        { }
+
+        private static DbContextOptions GetOptions(string connectionString)
+        {
+            return MySqlDbContextOptionsExtensions.UseMySql(new DbContextOptionsBuilder(), connectionString).Options;
+        }
+
+        public DbSet<Video> VideoItems { get; set; }
         public DbSet<Grade> Grades { get; set; }
     }
 }
+
+
+

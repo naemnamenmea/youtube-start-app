@@ -56,12 +56,12 @@ namespace CoreWebAPI.Controllers
 
                 if (!resault.Succeeded)
                 {
-                    return BadRequest();
+                    return BadRequest(new { message = "Username or password is incorrect" });
                 }
 
                 var user = await _userManager.FindByNameAsync(loginUserModel.UserName);
 
-                return Ok(GetToken(user));
+                return Ok(new {token = GetToken(user) });
             }
 
             return BadRequest(ModelState);
@@ -101,7 +101,7 @@ namespace CoreWebAPI.Controllers
                 User.Identity.Name ??
                 User.Claims.Where(c => c.Properties.ContainsKey("unique_name")).Select(c => c.Value).FirstOrDefault()
                 );
-            return Ok(GetToken(user));
+            return Json(GetToken(user));
 
         }
 
@@ -139,7 +139,7 @@ namespace CoreWebAPI.Controllers
 
         // GET: api/Users/5
         [HttpGet("{id}")]
-        public IActionResult GetById(int id)
+        public IActionResult GetById(string id)
         {
             var user = _userService.GetById(id);
             var userDto = _mapper.Map<User>(user);

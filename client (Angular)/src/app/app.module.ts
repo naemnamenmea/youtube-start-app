@@ -18,6 +18,7 @@ import { LoginComponent } from './login';
 import { RegisterComponent } from './register';
 import { appRoutingModule } from './app.routing';
 import { JwtInterceptor, ErrorInterceptor } from './_helpers';
+import { NavPanelComponent } from './_components/nav-panel/nav-panel.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { JwtInterceptor, ErrorInterceptor } from './_helpers';
     FormModalNewVideoComponent,
     HomeComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    NavPanelComponent
   ],
   imports: [
     appRoutingModule,

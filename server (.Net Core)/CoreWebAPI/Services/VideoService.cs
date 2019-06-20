@@ -34,12 +34,12 @@ namespace CoreWebAPI.Services
 
         public Task<Video> FindVideoAsync(string url)
         {
-            return _context.VideoItems.FirstOrDefaultAsync(v => v.url == url);
+            return _context.VideoItems.FirstOrDefaultAsync(v => v.Url == url);
         }
 
         public async Task<ActionResult<IEnumerable<Video>>> GetLatestVideosAsync()
         {
-            return await _context.VideoItems.OrderByDescending(video => video.posted_date).ToListAsync();
+            return await _context.VideoItems.OrderByDescending(video => video.Posted_date).ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Video>>> GetTopVideosAsync(int num)

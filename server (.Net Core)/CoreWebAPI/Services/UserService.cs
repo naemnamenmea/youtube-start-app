@@ -9,7 +9,7 @@ namespace CoreWebAPI.Services
     public interface IUserService
     {
         User Authenticate(string username, string password);
-        User GetById(int id);
+        User GetById(string id);
         void Delete(int id);
     }
 
@@ -30,10 +30,9 @@ namespace CoreWebAPI.Services
             return null;
         }
 
-        public User GetById(int id)
+        public User GetById(string id)
         {
-            //return _context.Users.Find(id);
-            return null;
+            return _context.Users.Find(id);
         }
 
         public void Delete(int id)

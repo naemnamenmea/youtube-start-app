@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
 import { AuthenticationService } from '../_services';
 
 @Component({
@@ -35,11 +34,13 @@ export class LoginComponent implements OnInit {
       password: ['', Validators.required]
     });
 
+    
     // get return url from route parameters or default to '/'
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
-
+    
     if (this.route.snapshot.queryParams['registered']) {
       this.success = 'Регистрация прошла успешно';
+      this.router.navigate(['/login'], { queryParams: {}});
     }
   }
 
