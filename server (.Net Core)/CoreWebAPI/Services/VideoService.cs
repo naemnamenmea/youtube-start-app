@@ -44,7 +44,7 @@ namespace CoreWebAPI.Services
 
         public async Task<ActionResult<IEnumerable<Video>>> GetTopVideosAsync(int num)
         {
-            return await _context.VideoItems.OrderByDescending(video => video.grade).Take(num).ToListAsync();
+            return await _context.VideoItems.OrderByDescending(video => video.TotalRating).Take(num).ToListAsync();
         }
 
         public async Task<ActionResult<IEnumerable<Video>>> GetVideosAsync()
@@ -61,6 +61,51 @@ namespace CoreWebAPI.Services
         {
             return _context.SaveChangesAsync();
         }
+
+        public RateResponse Vote(int userId, int id, float grade)
+        {
+            User user = _context.Users.Include(u => u.VideoGrades).FirstOrDefault(u => u.Id == userId);
+            Video video = _context.VideoItems.FirstOrDefault(v => v.Id == id);
+
+            if (user == null || video == null)
+            {
+                return null;
+            }
+
+            var _grade = _context.Grades.Find();
+            float newRating = 0.0f;
+            int newCount = 0;
+
+            if (_grade == null)
+            {
+                //[-] при добавлении голоса =>
+                //1. ++количетсво-проголосовавших
+                //2. totalRate += new_vote;
+            }
+            else
+            {
+                //[-] при изменении голоса => обновить оценку, т.е
+                //1. получить старую оценку пользователя
+                //2. получить суммарную оценку и количество голосовавших
+                //2. вычесть старую оценку из суммарного рейтинга
+                //3. добавить новую оценку к суммарному рейтингу
+            }
+
+            video.VoteCount = newCount;
+            video.TotalRating = newRating;
+
+            user.VideoGrades.Add(new Grade
+            {
+                UserId = userId,
+                VideoId = id,
+                Value = grade
+            });
+            _context.SaveChanges();
+            return new RateResponse {
+                total_rating = newRating,
+                users_count = newCount
+            };
+        }
     }
 
     public interface IVideoService
@@ -74,5 +119,6 @@ namespace CoreWebAPI.Services
         Task SaveChangesAsync();
         void ChangeVideoState(Video video, EntityState modified);
         void Remove(Video video);
+        RateResponse Vote(int userId, int id, float grade);
     }
 }

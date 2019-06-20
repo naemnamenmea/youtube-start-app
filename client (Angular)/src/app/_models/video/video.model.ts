@@ -6,3 +6,8 @@ export class Video {
     grade: number;
     thumbnail: string;
 }
+
+export class RateResponse {
+    users_count: number;
+    total_rating: number;
+}

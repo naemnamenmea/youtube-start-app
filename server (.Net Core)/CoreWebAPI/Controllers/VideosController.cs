@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using CoreWebAPI.Models;
 using CoreWebAPI.Helpers;
+using CoreWebAPI.Models;
 using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
@@ -97,15 +97,11 @@ namespace CoreWebAPI.Controllers
 
         [Authorize]
         [HttpGet("vote")]
-        public async Task<ActionResult<string>> Vote([FromQuery]int id, [FromQuery]double vote)
+        public async Task<JsonResult> Vote([FromQuery]int id, [FromQuery]float vote)
         {
-            var claimsIdentity = this.User.Identity as ClaimsIdentity;
-            var userId = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
-            User user = _userService.GetById(userId);
-            // проверяем ставил ли он оценку данному видео раньше
-            // если да, то вернуть сообщение об ошибке
-            // если нет, то поставить оценку и вернуть обновленное значение
-            return userId;
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return Json(_videoService.Vote(int.Parse(userId),id,vote));
         }
 
         // POST api/Videos

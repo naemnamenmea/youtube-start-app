@@ -14,5 +14,7 @@ namespace CoreWebAPI.Models
 
         public int VideoId { get; set; }
         public Video Video { get; set; }
+
+        public float Value { get; set; }
     }
 }

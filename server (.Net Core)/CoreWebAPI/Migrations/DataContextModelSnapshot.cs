@@ -26,6 +26,8 @@ namespace CoreWebAPI.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<float>("Value");
+
                     b.HasKey("UserId", "VideoId");
 
                     b.HasAlternateKey("Id");
@@ -99,10 +101,12 @@ namespace CoreWebAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
+                    b.Property<float?>("TotalRating");
+
                     b.Property<string>("Url")
                         .IsRequired();
 
-                    b.Property<float?>("grade");
+                    b.Property<int?>("VoteCount");
 
                     b.HasKey("Id");
 

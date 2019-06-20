@@ -32,7 +32,12 @@ export class VideoListBodyComponent implements OnInit {
 
   vote(videoId: number) {
     var vote: number = 228;
-    this.service.sendVote(videoId, vote).toPromise().then(res => console.log(res))
+    this.service.sendVote(videoId, vote).toPromise().then(res => {
+      console.log("vote resault: " + res);
+      var index = this.service.videoList.findIndex(x => x.id == videoId);
+      this.service.videoList[index].grade = res.total_rating * 1.0 / res.users_count;
+      this.service.refreshList(); // is this needed?
+    })
       .catch(err => console.log(err));
   }
 

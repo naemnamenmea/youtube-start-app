@@ -59,7 +59,8 @@ namespace CoreWebAPI.Migrations
                     Title = table.Column<string>(maxLength: 200, nullable: false),
                     Thumbnail = table.Column<string>(nullable: false),
                     Posted_date = table.Column<DateTime>(nullable: true),
-                    grade = table.Column<float>(nullable: true)
+                    TotalRating = table.Column<float>(nullable: true),
+                    VoteCount = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -179,7 +180,8 @@ namespace CoreWebAPI.Migrations
                     Id = table.Column<int>(nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     UserId = table.Column<int>(nullable: false),
-                    VideoId = table.Column<int>(nullable: false)
+                    VideoId = table.Column<int>(nullable: false),
+                    Value = table.Column<float>(nullable: false)
                 },
                 constraints: table =>
                 {

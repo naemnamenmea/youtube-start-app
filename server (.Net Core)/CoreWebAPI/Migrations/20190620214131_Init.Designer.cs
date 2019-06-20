@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoreWebAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190620194202_Init")]
+    [Migration("20190620214131_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -27,6 +27,8 @@ namespace CoreWebAPI.Migrations
 
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<float>("Value");
 
                     b.HasKey("UserId", "VideoId");
 
@@ -101,10 +103,12 @@ namespace CoreWebAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
+                    b.Property<float?>("TotalRating");
+
                     b.Property<string>("Url")
                         .IsRequired();
 
-                    b.Property<float?>("grade");
+                    b.Property<int?>("VoteCount");
 
                     b.HasKey("Id");
 
