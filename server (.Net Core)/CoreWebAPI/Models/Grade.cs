@@ -8,9 +8,11 @@ namespace CoreWebAPI.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        [ForeignKey("fk_users")]
+
         public int UserId { get; set; }
-        [ForeignKey("fk_videos")]
+        public User User { get; set; }
+
         public int VideoId { get; set; }
+        public Video Video { get; set; }
     }
 }

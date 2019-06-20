@@ -67,13 +67,13 @@ namespace CoreWebAPI.Controllers
             return BadRequest(ModelState);
         }
 
-        private string GetToken(IdentityUser user)
+        private string GetToken(User user)
         {
             var utcNow = DateTime.UtcNow;
 
             var claims = new Claim[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
                 new Claim(JwtRegisteredClaimNames.UniqueName, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.Iat, utcNow.ToString())
@@ -148,7 +148,7 @@ namespace CoreWebAPI.Controllers
 
         // PUT: api/Users/5
         [HttpPut("{id}")]
-        public IActionResult Update(string id, [FromBody] User userDto)
+        public IActionResult Update(int id, [FromBody] User userDto)
         {
             // map dto to entity and set id
             var user = _mapper.Map<User>(userDto);

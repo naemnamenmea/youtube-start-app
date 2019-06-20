@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CoreWebAPI.Models
 {
-    public class User : IdentityUser
-    {
+    public class User : IdentityUser<int>
+    {               
         public User(string userName) : base(userName)
         {
         }
 
-        public List<Video> Videos { get; set; }
+        public ICollection<Grade> VideoGrades { get; set; }
     }
 }

@@ -60,11 +60,15 @@ namespace CoreWebAPI
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+            string dbConnectionString = Configuration.GetConnectionString("HomeConnection");
+
             services.AddDbContext<DataContext>(options =>
-                options.UseMySql(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddDefaultIdentity<User>()
+                options.UseMySql(dbConnectionString));
+            //options.UseMySql(Configuration.GetConnectionString(Environment.GetEnvironmentVariable("ConnectionName"))));
+            services.AddIdentity<User, IdentityRole<int>>()
                 //.AddDefaultUI(UIFramework.Bootstrap4)
-                .AddEntityFrameworkStores<DataContext>();
+                .AddEntityFrameworkStores<DataContext>()
+                .AddDefaultTokenProviders();
 
             var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]));
             services.AddAuthentication(options =>

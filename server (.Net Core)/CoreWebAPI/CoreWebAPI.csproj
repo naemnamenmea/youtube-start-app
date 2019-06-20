@@ -14,6 +14,10 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\ValuesController.cs" />
+    <Compile Remove="Migrations\20190620193939_AddProductReviews.cs" />
+    <Compile Remove="Migrations\20190620193939_AddProductReviews.Designer.cs" />
+    <Compile Remove="Migrations\20190620194033_Grades_1.cs" />
+    <Compile Remove="Migrations\20190620194033_Grades_1.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

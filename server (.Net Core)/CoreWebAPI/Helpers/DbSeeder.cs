@@ -19,13 +19,18 @@ namespace CoreWebAPI.Helpers
         private static void SeedVideos(DataContext context)
         {
             context.Database.EnsureCreated();
-            string onInit = "on_init";
-            Video video = new Video();
-            video.Thumbnail = onInit;
-            video.Url = onInit;
-            video.Title = onInit;
-            context.VideoItems.Add(video);
-            context.SaveChanges();
+
+            string onInit = "on_init_empty_video";
+            Video video = new Video {
+                Thumbnail = onInit,
+                Url = onInit,
+                Title = onInit
+            };
+            if(context.VideoItems.FirstOrDefault(v => v.Url == onInit) == null)
+            {
+                context.VideoItems.Add(video);
+                context.SaveChanges();
+            }
         }
 
         private static void SeedUsers(UserManager<User> userManager, IMapper mapper)

@@ -25,6 +25,6 @@ namespace CoreWebAPI.Models
 
         public float? grade { get; set; }
 
-        public List<User> Users { get; set; }
+        public ICollection<Grade> UserGrades { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System;
 using System.IO;
 
 namespace CoreWebAPI
@@ -14,6 +15,16 @@ namespace CoreWebAPI
     {
         public static void Main(string[] args)
         {
+            bool EnvActivated = false;
+            string ConnectionNameKey = "ConnectionName";
+            string ConnectionNameValue = "HomeConnection";
+
+            if(Environment.GetEnvironmentVariable(ConnectionNameKey) == null)
+            {
+                Environment.SetEnvironmentVariable(ConnectionNameKey, ConnectionNameValue);
+                EnvActivated = true;
+            }
+
             //var config = new ConfigurationBuilder()
             //    .SetBasePath(Directory.GetCurrentDirectory())
             //    .AddJsonFile("appsettings.json", optional: false)
@@ -24,8 +35,13 @@ namespace CoreWebAPI
             //{
 
             //}
-
+            
             BuildWebHost(args).Run();
+
+            if(EnvActivated)
+            {
+                Environment.SetEnvironmentVariable(ConnectionNameKey, null);
+            }
         }
 
         public static IWebHost BuildWebHost(string[] args)
