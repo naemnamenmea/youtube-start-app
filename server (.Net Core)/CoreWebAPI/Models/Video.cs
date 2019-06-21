@@ -23,9 +23,9 @@ namespace CoreWebAPI.Models
 
         public DateTime? Posted_date { get; set; }
 
-        public float? TotalRating { get; set; }
+        public float TotalRating { get; set; }
 
-        public int? VoteCount { get; set; }
+        public int VoteCount { get; set; }
 
         public ICollection<Grade> UserGrades { get; set; }
     }

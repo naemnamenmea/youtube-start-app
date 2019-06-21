@@ -85,7 +85,7 @@ namespace CoreWebAPI.Controllers
                 signingCredentials: signingCredentials,
                 claims: claims,
                 notBefore: utcNow,
-                expires: DateTime.UtcNow.AddSeconds(_configuration.GetSection("Logging").GetValue<i>("TimeOut"))
+                expires: DateTime.UtcNow.AddSeconds(_configuration.GetSection("Logging").GetValue<double>("TimeOut"))
                 );
 
             return new JwtSecurityTokenHandler().WriteToken(jwt);

@@ -17,7 +17,7 @@ namespace CoreWebAPI
         {
             bool EnvActivated = false;
             string ConnectionNameKey = "ConnectionName";
-            string ConnectionNameValue = "HomeConnection";
+            string ConnectionNameValue = "DefaultConnection";
 
             if(Environment.GetEnvironmentVariable(ConnectionNameKey) == null)
             {

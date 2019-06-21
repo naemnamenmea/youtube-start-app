@@ -18,7 +18,10 @@
               <span class="star" [class.full]="fill === 100">&#9733;</span>
             </ng-template>
   
-            <ngb-rating class="rating_panel" [(rate)]="video.grade" [max]=5 [starTemplate]="t" (click)="vote(video.id)"></ngb-rating>
+            <ngb-rating class="rating_panel" [max]=5 [starTemplate]="t" (rateChange)='vote(video.id,$event.target.rate)'></ngb-rating>
+            <!-- $element.target -->
+            <!-- {{prod.getAttribute('data-category')} -->
+            <!-- [(rate)]="video.grade"  -->
           </div>
         </div>
       </td>

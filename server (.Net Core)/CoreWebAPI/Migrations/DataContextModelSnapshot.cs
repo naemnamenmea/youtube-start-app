@@ -101,12 +101,16 @@ namespace CoreWebAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.Property<float?>("TotalRating");
+                    b.Property<float>("TotalRating")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0f);
 
                     b.Property<string>("Url")
                         .IsRequired();
 
-                    b.Property<int?>("VoteCount");
+                    b.Property<int>("VoteCount")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0);
 
                     b.HasKey("Id");
 

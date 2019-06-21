@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace CoreWebAPI.Migrations
 {
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -59,8 +59,8 @@ namespace CoreWebAPI.Migrations
                     Title = table.Column<string>(maxLength: 200, nullable: false),
                     Thumbnail = table.Column<string>(nullable: false),
                     Posted_date = table.Column<DateTime>(nullable: true),
-                    TotalRating = table.Column<float>(nullable: true),
-                    VoteCount = table.Column<int>(nullable: true)
+                    TotalRating = table.Column<float>(nullable: false, defaultValue: 0f),
+                    VoteCount = table.Column<int>(nullable: false, defaultValue: 0)
                 },
                 constraints: table =>
                 {

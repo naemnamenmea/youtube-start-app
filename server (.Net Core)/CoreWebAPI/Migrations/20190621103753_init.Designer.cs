@@ -9,8 +9,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CoreWebAPI.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20190620214131_Init")]
-    partial class Init
+    [Migration("20190621103753_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -103,12 +103,16 @@ namespace CoreWebAPI.Migrations
                         .IsRequired()
                         .HasMaxLength(200);
 
-                    b.Property<float?>("TotalRating");
+                    b.Property<float>("TotalRating")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0f);
 
                     b.Property<string>("Url")
                         .IsRequired();
 
-                    b.Property<int?>("VoteCount");
+                    b.Property<int>("VoteCount")
+                        .ValueGeneratedOnAdd()
+                        .HasDefaultValue(0);
 
                     b.HasKey("Id");
 

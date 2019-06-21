@@ -35,6 +35,14 @@ namespace CoreWebAPI.Helpers
             builder.Entity<Video>()
                 .HasKey(x => x.Id);
 
+            builder.Entity<Video>()
+                .Property(v => v.VoteCount)
+                .HasDefaultValue(0);
+
+            builder.Entity<Video>()
+                .Property(v => v.TotalRating)
+                .HasDefaultValue(0);
+
             builder.Entity<User>()
                 .HasKey(x => x.Id);
 

@@ -60,7 +60,7 @@ namespace CoreWebAPI
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
-            string dbConnectionString = Configuration.GetConnectionString("HomeConnection");
+            string dbConnectionString = Configuration.GetConnectionString("DefaultConnection");
 
             services.AddDbContext<DataContext>(options =>
                 options.UseMySql(dbConnectionString));
