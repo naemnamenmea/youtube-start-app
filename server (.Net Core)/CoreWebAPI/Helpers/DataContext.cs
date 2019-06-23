@@ -18,7 +18,9 @@ namespace CoreWebAPI.Helpers
 
         public DataContext(string connectionString)
             :base(GetOptions(connectionString))
-        { }
+        {
+            
+        }
 
         private static DbContextOptions GetOptions(string connectionString)
         {

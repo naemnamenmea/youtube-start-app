@@ -1,18 +1,18 @@
 ﻿using AutoMapper;
 using CoreWebAPI.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace CoreWebAPI.Helpers
 {
-    public class DbSeeder
+    public static class ModelBuilderExtensions
     {
-        public static void SeedDb(DataContext context, UserManager<User> userManager, IMapper mapper)
+        public static void Seed(DataContext context, UserManager<User> userManager)
         {
-            SeedUsers(userManager, mapper);
+            SeedUsers(userManager);
             SeedVideos(context);
         }
 
@@ -50,20 +50,19 @@ namespace CoreWebAPI.Helpers
 
             foreach (var video in videos)
             {
-                if (context.VideoItems.Any(v => v.Url == video.Url))
+                var _video = context.VideoItems.FirstOrDefault(v => v.Url == video.Url);
+                if (_video != null)
                 {
-                    // Update video
-                    //context.VideoItems.Attach(video);
-                    //context.ObjectStateManager.
-                } else
+                    context.SaveChanges();
+                }
+                else
                 {
                     context.VideoItems.Add(video);
                 }
             }
-            context.SaveChanges();
         }
 
-        private static void SeedUsers(UserManager<User> userManager, IMapper mapper)
+        private static void SeedUsers(UserManager<User> userManager)
         {
             var users = new List<Tuple<User, string>>() {
                 new Tuple<User,string>(new User("admin"), "tesT321!"),

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using CoreWebAPI.Models;
 using CoreWebAPI.Helpers;
+using CoreWebAPI.Models;
 using CoreWebAPI.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,48 +9,37 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System;
 
 namespace CoreWebAPI
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IHostingEnvironment env)
         {
-            Configuration = configuration;
+            var builder = new ConfigurationBuilder()
+                .SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+                .AddEnvironmentVariables();
+
+            if (env.IsDevelopment())
+            {
+                builder.AddUserSecrets<Startup>();
+            }            
+
+            Configuration = builder.Build();
         }
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors(options =>
-            {
-                options.AddDefaultPolicy(builder =>
-                {
-                    builder
-                     .AllowAnyOrigin()
-                    //.WithOrigins("http://localhost:4205/")
-                    .AllowAnyHeader()
-                    .AllowCredentials()
-                    .AllowAnyMethod();
-                });
-            });
-
-            //var mappingConfig = new MapperConfiguration(mc =>
-            //{
-            //    mc.AddProfile(new MappingProfile());
-            //});
-            //IMapper mapper = mappingConfig.CreateMapper();
-            //services.AddSingleton(mapper);
-
-            // configure DI for application services
+            services.AddOptions();
+            services.AddCorsAux();            
+            services.AddAutoMapper(typeof(Startup));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IVideoService, VideoService>();
-            services.AddAutoMapper();
             services.AddHttpClient<NoEmbedService>();
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -59,43 +48,20 @@ namespace CoreWebAPI
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
+            services.Configure<AppSettings>(Configuration);
 
-            string dbConnectionString = Configuration.GetConnectionString("DefaultConnection");
-
-            services.AddDbContext<DataContext>(options =>
-                options.UseMySql(dbConnectionString));
-            //options.UseMySql(Configuration.GetConnectionString(Environment.GetEnvironmentVariable("ConnectionName"))));
+            services.ConfigureMySqlContext(Configuration);            
             services.AddIdentity<User, IdentityRole<int>>()
                 //.AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<DataContext>()
                 .AddDefaultTokenProviders();
-
-            var signingKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Tokens:Key"]));
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(config =>
-            {
-                config.RequireHttpsMetadata = false;
-                config.SaveToken = true;
-                config.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = signingKey,
-                    ValidateIssuer = false,
-                    ClockSkew = TimeSpan.Zero,
-                    ValidateAudience = false,
-                    ValidateLifetime = true
-                };
-            });
-
+            services.AddAuthenticationAux(Configuration["Tokens:Key"]);
             services.AddMvc();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env,
-            DataContext context, UserManager<User> userManager, IMapper mapper)
+            DataContext context, UserManager<User> userManager)
         {
             if (env.IsDevelopment())
             {
@@ -116,7 +82,7 @@ namespace CoreWebAPI
 
             app.UseAuthentication();
 
-            DbSeeder.SeedDb(context, userManager, mapper);
+            ModelBuilderExtensions.Seed(context, userManager);
 
             app.UseMvc();
         }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
 using System.Security.Claims;
@@ -27,6 +28,7 @@ namespace CoreWebAPI.Controllers
         private NoEmbedService noembedService;
         private readonly IVideoService _videoService;
         private readonly IUserService _userService;
+        private readonly AppSettings _settings;
 
         private string CreateLogMsg(string msg)
         {
@@ -35,18 +37,20 @@ namespace CoreWebAPI.Controllers
         }
 
         public VideosController(
-            DataContext context, 
+            DataContext context,
             IVideoService vserv,
             IUserService userv,
-            ILogger<VideosController> logger, 
-            NoEmbedService noembed, 
-            IMapper mapper)
+            ILogger<VideosController> logger,
+            NoEmbedService noembed,
+            IMapper mapper,
+            IOptions<AppSettings> settings)
         {
             noembedService = noembed;
             _logger = logger;
             _userService = userv;
             _mapper = mapper;
             _videoService = vserv;
+            _settings = settings.Value;
         }
 
         [Route("[action]/{id}")]
@@ -77,7 +81,7 @@ namespace CoreWebAPI.Controllers
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Video>>> Get()
-        {
+        {           
             return await _videoService.GetVideosAsync();
         }
 
@@ -101,7 +105,7 @@ namespace CoreWebAPI.Controllers
         {
             var claimsIdentity = User.Identity as ClaimsIdentity;
             var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            return Json(_videoService.Vote(int.Parse(userId),id,vote));
+            return Json(_videoService.Vote(int.Parse(userId), id, vote));
         }
 
         // POST api/Videos
@@ -109,6 +113,11 @@ namespace CoreWebAPI.Controllers
         [HttpPost]
         public async Task<ActionResult<Video>> Post([FromBody] Video newVideo) //async Task<ActionResult<
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             Video video = await _videoService.FindVideoAsync(newVideo.Url);
             if (video != null)
                 return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status409Conflict,
@@ -125,8 +134,6 @@ namespace CoreWebAPI.Controllers
         //[HttpPost]
         //public void Post(string videoId)
         //{
-
-
         //    WebRequest request = WebRequest.Create("https://noembed.com/embed?url=https://www.youtube.com/watch?v=" + videoId);
 
         //    request.Credentials = CredentialCache.DefaultCredentials;
@@ -137,23 +144,21 @@ namespace CoreWebAPI.Controllers
         //        StreamReader reader = new StreamReader(dataStream);
         //        string responseFromServer = reader.ReadToEnd();
         //        dynamic json = JsonConvert.DeserializeObject(responseFromServer);
-        //        Video video = new Video();
-        //        video.title = responseFromServer + (videoId == "" ? "BAD" : "GOOD {" + videoId + "}");
-        //        video.id = videoId;
         //        video.thumbnail = json.thumbnail_url;
-        //        video.posted_date = new DateTime();
-        //        _context.VideoItems.Add(video);
-        //        _context.SaveChanges();
         //    }
         //    response.Close();
-        //    //return CreatedAtAction(nameof(Get), new { id = video.id }, video);
+        // return CreatedAtAction(nameof(Get), new { id = video.id }, video);
         //}
 
-        // PUT api/Videos/5
         [Authorize]
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromRoute] string id, [FromBody] Video video)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             if (id != video.Url)
             {
                 return BadRequest();
