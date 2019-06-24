@@ -50,10 +50,11 @@ namespace CoreWebAPI.Helpers
 
             foreach (var video in videos)
             {
+                int Id = 0;
                 if (context.VideoItems.Any(v => v.Url == video.Url))
                 {
-                    // Update video
-                    //context.VideoItems.Attach(video);
+                    //Id = video.Id;
+                    //context.VideoItems.Remove()
                     //context.ObjectStateManager.
                 } else
                 {

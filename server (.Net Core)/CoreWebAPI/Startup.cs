@@ -61,7 +61,7 @@ namespace CoreWebAPI
             });
 
             string dbConnectionString = Configuration.GetConnectionString("DefaultConnection");
-
+            
             services.AddDbContext<DataContext>(options =>
                 options.UseMySql(dbConnectionString));
             //options.UseMySql(Configuration.GetConnectionString(Environment.GetEnvironmentVariable("ConnectionName"))));
