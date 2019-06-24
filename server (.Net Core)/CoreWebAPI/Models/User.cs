@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -8,6 +9,7 @@ namespace CoreWebAPI.Models
     {               
         public User(string userName) : base(userName)
         {
+            
         }
 
         public ICollection<Grade> VideoGrades { get; set; }

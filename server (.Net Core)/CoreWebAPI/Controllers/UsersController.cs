@@ -50,21 +50,21 @@ namespace CoreWebAPI.Controllers
         [Route("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserModel loginUserModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                var resault = await _signInManager.PasswordSignInAsync(loginUserModel.UserName, loginUserModel.Password, false, false);
-
-                if (!resault.Succeeded)
-                {
-                    return BadRequest(new { message = "Username or password is incorrect" });
-                }
-
-                var user = await _userManager.FindByNameAsync(loginUserModel.UserName);
-
-                return Ok(new {token = GetToken(user) });
+                return BadRequest(ModelState);
             }
 
-            return BadRequest(ModelState);
+            var resault = await _signInManager.PasswordSignInAsync(loginUserModel.UserName, loginUserModel.Password, false, false);
+
+            if (!resault.Succeeded)
+            {
+                return BadRequest(new { message = "Username or password is incorrect" });
+            }
+
+            var user = await _userManager.FindByNameAsync(loginUserModel.UserName);
+
+            return Ok(new { token = GetToken(user) });
         }
 
         private string GetToken(User user)
@@ -109,23 +109,21 @@ namespace CoreWebAPI.Controllers
         [Route("register")]
         public async Task<IActionResult> Register([FromBody]RegisterUserModel regModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                User user = _mapper.Map<User>(regModel);
-                var resault = await _userManager.CreateAsync(user, regModel.Password);
-
-                if (resault.Succeeded)
-                {
-                    return Ok();
-                }
-                else
-                {
-                    return BadRequest(resault.Errors);
-                }
-
-
+                return BadRequest(ModelState);
             }
-            return BadRequest(ModelState);
+            User user = _mapper.Map<User>(regModel);
+            var resault = await _userManager.CreateAsync(user, regModel.Password);
+
+            if (resault.Succeeded)
+            {
+                return Ok();
+            }
+            else
+            {
+                return BadRequest(resault.Errors);
+            }
         }
 
         [HttpPost]
@@ -137,7 +135,6 @@ namespace CoreWebAPI.Controllers
             return Ok();
         }
 
-        // GET: api/Users/5
         [HttpGet("{id}")]
         public IActionResult GetById(string id)
         {
@@ -146,10 +143,14 @@ namespace CoreWebAPI.Controllers
             return Ok(userDto);
         }
 
-        // PUT: api/Users/5
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] User userDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             // map dto to entity and set id
             var user = _mapper.Map<User>(userDto);
             user.Id = id;
@@ -162,12 +163,10 @@ namespace CoreWebAPI.Controllers
             }
             catch (AppException ex)
             {
-                // return error message if there was an exception
                 return BadRequest(new { message = ex.Message });
             }
         }
 
-        // DELETE: api/Users/5
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
