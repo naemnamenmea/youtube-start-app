@@ -34,7 +34,7 @@ namespace CoreWebAPI.Services
 
         public Task<Video> FindVideoAsync(string url)
         {
-            return _context.VideoItems.FirstOrDefaultAsync(v => v.Url == url);
+            return _context.VideoItems.FirstOrDefaultAsync(v => v.VideoId == url);
         }
 
         public async Task<ActionResult<IEnumerable<Video>>> GetLatestVideosAsync()
@@ -47,7 +47,7 @@ namespace CoreWebAPI.Services
             return await _context.VideoItems.OrderByDescending(video => video.TotalRating).Take(num).ToListAsync();
         }
 
-        public async Task<ActionResult<IEnumerable<Video>>> GetVideosAsync()
+        public async Task<ActionResult<IEnumerable<object>>> GetVideosAsync()
         {
             return await _context.VideoItems.ToListAsync();
         }
@@ -62,7 +62,7 @@ namespace CoreWebAPI.Services
             return _context.SaveChangesAsync();
         }
 
-        public RateResponse Vote(int userId, int id, float grade)
+        public object Vote(int userId, int id, float grade)
         {
             User user = _context.Users.Include(u => u.VideoGrades).FirstOrDefault(u => u.Id == userId);
             Video video = _context.VideoItems.FirstOrDefault(v => v.Id == id);
@@ -72,39 +72,30 @@ namespace CoreWebAPI.Services
                 return null;
             }
 
-            var _grade = _context.Grades.Find();
-            float newRating = 0.0f;
-            int newCount = 0;
+            var _grade = _context.Grades.Find(userId,id);
 
             if (_grade == null)
             {
-                //[-] при добавлении голоса =>
-                //1. ++количетсво-проголосовавших
-                //2. totalRate += new_vote;
+                ++video.VoteCount;
+
+                user.VideoGrades.Add(new Grade
+                {
+                    UserId = userId,
+                    VideoId = id,
+                    Value = grade
+                });                
             }
             else
             {
-                //[-] при изменении голоса => обновить оценку, т.е
-                //1. получить старую оценку пользователя
-                //2. получить суммарную оценку и количество голосовавших
-                //2. вычесть старую оценку из суммарного рейтинга
-                //3. добавить новую оценку к суммарному рейтингу
+                video.TotalRating -= _grade.Value;
+                _grade.Value = grade;
             }
+            video.TotalRating += grade;
+            video.AvRating = video.TotalRating / video.VoteCount;
 
-            video.VoteCount = newCount;
-            video.TotalRating = newRating;
-
-            user.VideoGrades.Add(new Grade
-            {
-                UserId = userId,
-                VideoId = id,
-                Value = grade
-            });
             _context.SaveChanges();
-            return new RateResponse {
-                total_rating = newRating,
-                users_count = newCount
-            };
+
+            return new { avRating = video.AvRating };
         }
     }
 
@@ -112,13 +103,13 @@ namespace CoreWebAPI.Services
     {
         Task<ActionResult<IEnumerable<Video>>> GetTopVideosAsync(int num);
         Task<ActionResult<IEnumerable<Video>>> GetLatestVideosAsync();
-        Task<ActionResult<IEnumerable<Video>>> GetVideosAsync();
+        Task<ActionResult<IEnumerable<object>>> GetVideosAsync();
         Task<Video> FindVideoAsync(int id);
         Task<Video> FindVideoAsync(string url);
         void AddVideoAsync(Video video);
         Task SaveChangesAsync();
         void ChangeVideoState(Video video, EntityState modified);
         void Remove(Video video);
-        RateResponse Vote(int userId, int id, float grade);
+        object Vote(int userId, int id, float grade);
     }
 }

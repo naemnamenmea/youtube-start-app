@@ -1,13 +1,10 @@
 export class Video {
-    id: number;
-    url : string;
+    id?: number;
+    videoId: string;
     title: string;
     posted_date: Date;
-    grade: number;
+    totalRating?: number;
+    voteCount?: number;
+    avRating?: number;
     thumbnail: string;
-}
-
-export class RateResponse {
-    users_count: number;
-    total_rating: number;
 }

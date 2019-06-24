@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Dynamic;
 
 namespace CoreWebAPI.Models
 {
@@ -12,7 +13,7 @@ namespace CoreWebAPI.Models
         public int Id { get; set; }
 
         [Required]
-        public string Url { get; set; }
+        public string VideoId { get; set; }
 
         [Required]
         [StringLength(200)]
@@ -27,12 +28,9 @@ namespace CoreWebAPI.Models
 
         public int VoteCount { get; set; }
 
-        public ICollection<Grade> UserGrades { get; set; }
-    }
+        public float AvRating { get; set; }
 
-    public class RateResponse
-    {
-        public int users_count { get; set; }
-        public float total_rating { get; set; }
+        public ICollection<Grade> UserGrades { get; set; }
+            
     }
 }

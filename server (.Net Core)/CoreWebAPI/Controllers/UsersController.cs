@@ -59,7 +59,7 @@ namespace CoreWebAPI.Controllers
 
             if (!resault.Succeeded)
             {
-                return BadRequest(new { message = "Username or password is incorrect" });
+                return BadRequest(new { message = "Неверные имя пользователя или пароль" });
             }
 
             var user = await _userManager.FindByNameAsync(loginUserModel.UserName);

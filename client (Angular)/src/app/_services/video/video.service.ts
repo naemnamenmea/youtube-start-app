@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Video, RateResponse } from '../../_models/video/video.model';
+import { Video } from '../../_models/video/video.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
@@ -38,7 +38,7 @@ export class VideoService {
   }
 
   sendVote(videoId: number, vote: number) {
-    return this.http.get<RateResponse>(this.videosAPI + '/' + this.voteAction + '?id=' + videoId + '&vote=' + vote);
+    return this.http.get(this.videosAPI + '/' + this.voteAction + '?id=' + videoId + '&vote=' + vote);
   }
 
   addVideo(video: Video) {  

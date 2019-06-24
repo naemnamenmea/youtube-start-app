@@ -50,15 +50,7 @@ namespace CoreWebAPI
             });
             services.Configure<AppSettings>(Configuration);
 
-<<<<<<< HEAD
-            string dbConnectionString = Configuration.GetConnectionString("DefaultConnection");
-            
-            services.AddDbContext<DataContext>(options =>
-                options.UseMySql(dbConnectionString));
-            //options.UseMySql(Configuration.GetConnectionString(Environment.GetEnvironmentVariable("ConnectionName"))));
-=======
-            services.ConfigureMySqlContext(Configuration);            
->>>>>>> 5386de054224f2499230e020eeca8ff0a95d389c
+            services.ConfigureMySqlContext(Configuration);          
             services.AddIdentity<User, IdentityRole<int>>()
                 //.AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<DataContext>()

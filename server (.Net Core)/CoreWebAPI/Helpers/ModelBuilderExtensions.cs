@@ -24,25 +24,25 @@ namespace CoreWebAPI.Helpers
             List<Video> videos = new List<Video> {
                 new Video{
                     Thumbnail = onInit,
-                    Url = onInit,
+                    VideoId = onInit,
                     Title = onInit,
                     Posted_date = DateTime.UtcNow.AddDays(-14)
                 },
                 new Video{
                     Thumbnail = "https://i.ytimg.com/vi/MyZpNZbuEF8/hqdefault.jpg",
-                    Url = "MyZpNZbuEF8",
+                    VideoId = "MyZpNZbuEF8",
                     Title = "Harry Potter: Wizards Unite | Launch Trailer",
                     Posted_date = DateTime.UtcNow.AddDays(-43)
                 },
                 new Video{
                     Thumbnail = "https://i.ytimg.com/vi/TZE9gVF1QbA/hqdefault.jpg",
-                    Url = "TZE9gVF1QbA",
+                    VideoId = "TZE9gVF1QbA",
                     Title = "Opening Credits | Game of Thrones | Season 8(HBO)",
                     Posted_date = DateTime.UtcNow.AddDays(-13)
                 },
                new Video{
                     Thumbnail = "https://i.ytimg.com/vi/Xs6_vecSv2Y/hqdefault.jpg",
-                    Url = "Xs6_vecSv2Y",
+                    VideoId = "Xs6_vecSv2Y",
                     Title = "Breaking Bad Greatest Moments",
                     Posted_date = DateTime.UtcNow.AddDays(-21)
                 }
@@ -50,25 +50,18 @@ namespace CoreWebAPI.Helpers
 
             foreach (var video in videos)
             {
-<<<<<<< HEAD:server (.Net Core)/CoreWebAPI/Helpers/DbSeeder.cs
-                int Id = 0;
-                if (context.VideoItems.Any(v => v.Url == video.Url))
-                {
-                    //Id = video.Id;
-                    //context.VideoItems.Remove()
-                    //context.ObjectStateManager.
-                } else
-=======
-                var _video = context.VideoItems.FirstOrDefault(v => v.Url == video.Url);
+                var _video = context.VideoItems.FirstOrDefault(v => v.VideoId == video.VideoId);
                 if (_video != null)
                 {
-                    context.SaveChanges();
+                    _video.Title = video.Title;
+                    //video.Id = _video.Id;
+                    //context.Entry(_video).CurrentValues.SetValues(video);
                 }
                 else
->>>>>>> 5386de054224f2499230e020eeca8ff0a95d389c:server (.Net Core)/CoreWebAPI/Helpers/ModelBuilderExtensions.cs
                 {
                     context.VideoItems.Add(video);
                 }
+                context.SaveChanges();
             }
         }
 

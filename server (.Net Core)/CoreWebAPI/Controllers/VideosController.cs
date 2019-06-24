@@ -80,7 +80,7 @@ namespace CoreWebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Video>>> Get()
+        public async Task<ActionResult<IEnumerable<object>>> Get()
         {           
             return await _videoService.GetVideosAsync();
         }
@@ -118,7 +118,7 @@ namespace CoreWebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            Video video = await _videoService.FindVideoAsync(newVideo.Url);
+            Video video = await _videoService.FindVideoAsync(newVideo.VideoId);
             if (video != null)
                 return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status409Conflict,
                     new { message = "Видео \"" + video.Title + "\" уже существует" });
@@ -159,7 +159,7 @@ namespace CoreWebAPI.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (id != video.Url)
+            if (id != video.VideoId)
             {
                 return BadRequest();
             }

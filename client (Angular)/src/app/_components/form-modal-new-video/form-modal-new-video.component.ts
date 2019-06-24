@@ -45,9 +45,8 @@ export class FormModalNewVideoComponent implements OnInit {
               throw 'invalid id';
             this.video = {
               id: 0,
-              url: videoUrl,
+              videoId: videoUrl,
               title: noembedItem['title'],
-              grade: null,
               posted_date: new Date(),
               thumbnail: noembedItem['thumbnail_url']
             };

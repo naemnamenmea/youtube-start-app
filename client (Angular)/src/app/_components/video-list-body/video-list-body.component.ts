@@ -1,8 +1,6 @@
-import { Component, OnInit, AfterViewInit, OnDestroy } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { VideoService } from 'src/app/_services/video/video.service';
-import { ToastrService } from 'ngx-toastr';
 import { DatePipe } from '@angular/common'
-import { HttpClient } from '@angular/common/http';
 import { ConfirmRemoveVideoComponent } from 'src/app/_components/confirm-remove-video/confirm-remove-video.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Video } from 'src/app/_models/video/video.model';
@@ -13,11 +11,11 @@ import { Video } from 'src/app/_models/video/video.model';
   styleUrls: ['./video-list-body.component.scss']
 })
 export class VideoListBodyComponent implements OnInit {
+
   constructor(
     // private activeModal: NgbActiveModal,
     private service: VideoService,
     private _modalService: NgbModal,
-    private toastr: ToastrService,
     public datepipe: DatePipe
   ) { }
 
@@ -30,13 +28,15 @@ export class VideoListBodyComponent implements OnInit {
     modalRef.componentInstance.video = video;
   }
 
-  vote(videoId: number, vote:any) {    
-    console.log("new_vote " + vote);
+  vote(video: Video, vote: any) {
+    let videoId = video.id;
     this.service.sendVote(videoId, vote).toPromise().then(res => {
-      console.log("vote resault: " + res);
+      let newAverageRating = res['avRating'];
+      if (typeof newAverageRating != "number")
+        throw Error("newAverageRating is undefined");
+      // console.log("vote: " + res + "; newAverageRating" + newAverageRating);
       var index = this.service.videoList.findIndex(x => x.id == videoId);
-      this.service.videoList[index].grade = res.total_rating * 1.0 / res.users_count;
-      this.service.refreshList(); // is this needed?
+      this.service.videoList[index].avRating = newAverageRating;
     })
       .catch(err => console.log(err));
   }
