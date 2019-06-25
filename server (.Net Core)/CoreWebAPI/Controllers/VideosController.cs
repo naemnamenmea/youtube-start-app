@@ -80,9 +80,18 @@ namespace CoreWebAPI.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<object>>> Get()
+        public async Task<ActionResult<IEnumerable<Video>>> Get()
         {           
             return await _videoService.GetVideosAsync();
+        }
+
+        [Authorize]
+        [HttpGet("info")]
+        public async Task<ActionResult<IEnumerable<UserRelatedVideoInfo>>> GetWithInfo()
+        {
+            var claimsIdentity = User.Identity as ClaimsIdentity;
+            var userId = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return await _videoService.GetUserRelatedVideoInfoAsync(int.Parse(userId));
         }
 
         // GET api/Videos/5

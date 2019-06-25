@@ -52,7 +52,7 @@ namespace CoreWebAPI.Helpers
 
         public static void ConfigureMySqlContext(this IServiceCollection services, IConfiguration config)
         {
-            var connectionString = config.GetConnectionString("DefaultConnection");
+            var connectionString = config.GetConnectionString("HomeConnection");
             services.AddDbContext<DataContext>(o => o.UseMySql(connectionString));
         }
     }

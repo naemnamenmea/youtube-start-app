@@ -1,14 +1,10 @@
 
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormModalNewVideoComponent } from '../form-modal-new-video/form-modal-new-video.component';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { HttpClient } from '@angular/common/http';
-import { NgForm } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { VideoService } from '../../_services/video/video.service';
 import { Video } from '../../_models/video/video.model';
-import { ToolsService } from '../../_services/tools/tools.service';
-import { Observable, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-video-list-header',
@@ -21,12 +17,10 @@ export class VideoListHeaderComponent implements OnInit {
   constructor(
     private videoService: VideoService,
     private modalService: NgbModal,
-    private toastr: ToastrService,
-    private net: ToolsService
+    private toastr: ToastrService
   ) { }
 
-  ngOnInit() {
-    this.videoService.refreshList();
+  ngOnInit() {    
   }
 
   openFormModal() {
@@ -41,7 +35,7 @@ export class VideoListHeaderComponent implements OnInit {
         }).catch(err => {
           this.toastr.warning(err, alert_title);
         });
-    }, reason => null).catch((error) => {
+    }, () => null).catch(() => {
       this.toastr.warning('Неверный url', alert_title);
     });
   }

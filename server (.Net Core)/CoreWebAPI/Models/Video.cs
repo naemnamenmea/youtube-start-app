@@ -33,4 +33,10 @@ namespace CoreWebAPI.Models
         public ICollection<Grade> UserGrades { get; set; }
             
     }
+
+    public class UserRelatedVideoInfo : Video
+    {
+        public bool IsModifiable { get; set; }
+    }
+
 }

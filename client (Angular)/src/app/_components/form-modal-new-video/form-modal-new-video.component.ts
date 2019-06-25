@@ -44,7 +44,6 @@ export class FormModalNewVideoComponent implements OnInit {
             if (noembedItem.hasOwnProperty('error'))
               throw 'invalid id';
             this.video = {
-              id: 0,
               videoId: videoUrl,
               title: noembedItem['title'],
               posted_date: new Date(),

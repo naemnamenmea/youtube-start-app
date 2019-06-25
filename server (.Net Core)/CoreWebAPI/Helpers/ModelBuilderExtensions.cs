@@ -14,6 +14,12 @@ namespace CoreWebAPI.Helpers
         {
             SeedUsers(userManager);
             SeedVideos(context);
+            SeedGrades(context);
+        }
+
+        private static void SeedGrades(DataContext context)
+        {
+            context.Database.ExecuteSqlCommand("TRUNCATE TABLE Grades");
         }
 
         private static void SeedVideos(DataContext context)
@@ -54,6 +60,9 @@ namespace CoreWebAPI.Helpers
                 if (_video != null)
                 {
                     _video.Title = video.Title;
+                    _video.TotalRating = video.TotalRating;
+                    _video.VoteCount = video.VoteCount;
+                    _video.AvRating = video.AvRating;
                     //video.Id = _video.Id;
                     //context.Entry(_video).CurrentValues.SetValues(video);
                 }

@@ -8,3 +8,7 @@ export class Video {
     avRating?: number;
     thumbnail: string;
 }
+
+export class UserRelatedVideoInfo extends Video {
+    IsModifiable: boolean;
+}

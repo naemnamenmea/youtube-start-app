@@ -8,6 +8,8 @@ namespace CoreWebAPI.Helpers
         public AutoMapperProfile()
         {
             CreateMap<RegisterUserModel, User>();
+            CreateMap<UserRelatedVideoInfo, Video>();
+            CreateMap<Video, UserRelatedVideoInfo>();
         }
     }
 }

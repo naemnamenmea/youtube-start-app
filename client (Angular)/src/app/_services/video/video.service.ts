@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
-import { Video } from '../../_models/video/video.model';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Video, UserRelatedVideoInfo } from '../../_models/video/video.model';
+import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
+
 export class VideoService {
-  
-  video: Video;
-  videoList: Video[];
+  videoList: UserRelatedVideoInfo[];
   readonly videosController = 'videos';
   readonly videosAPI = environment.serverURL + '/api/' + this.videosController;
   // actions
   readonly titleAction = 'gettitle';
   readonly topAction = 'top';
+  readonly infoAction = 'info';
   readonly voteAction = 'vote';
   readonly latestAction = 'latest';
 
@@ -22,31 +22,32 @@ export class VideoService {
     private http: HttpClient
   ) { }
 
-  testConnection() {
-    this.http.get(this.videosAPI)
-      .toPromise().then(res => {
-        console.log('SUCCESS: Connection established!');
-        console.log(res);
-      }).catch((error) => {
-        console.log(error);
-      });
+  getAllVideos() {
+    return this.http.get<Video[]>(this.videosAPI);
+  }
+
+  getAllVideosWithInfo() {
+    return this.http.get<UserRelatedVideoInfo[]>(this.videosAPI + '/' + this.infoAction);
   }
 
   refreshList() {
-    this.http.get(this.videosAPI)
-      .subscribe(res => this.videoList = res as Video[]);
+    this.getAllVideosWithInfo().toPromise().then(res => {
+      this.videoList = res;
+      console.log(this.videoList);
+      console.log(typeof this.videoList[0].IsModifiable);
+    }).catch(e => console.log(e));
   }
 
   sendVote(videoId: number, vote: number) {
-    return this.http.get(this.videosAPI + '/' + this.voteAction + '?id=' + videoId + '&vote=' + vote);
+    return this.http.get<UserRelatedVideoInfo>(this.videosAPI + '/' + this.voteAction + '?id=' + videoId + '&vote=' + vote);
   }
 
-  addVideo(video: Video) {  
+  addVideo(video: Video) {
     return this.http.post(this.videosAPI, video);
   }
 
   getNoembedYoutubeVideo(videoId: string) {
-    return this.http.get('https://noembed.com/embed?url=https://www.youtube.com/watch?v=' + videoId);
+    return this.http.get<any>('https://noembed.com/embed?url=https://www.youtube.com/watch?v=' + videoId);
   }
 
   removeVideo(videoId: number) {
@@ -54,16 +55,12 @@ export class VideoService {
   }
 
   showLastVideos() {
-    return this.http.get(this.videosAPI + '/' + this.latestAction)
-      .subscribe(res => this.videoList = res as Video[]);
+    return this.http.get<UserRelatedVideoInfo[]>(this.videosAPI + '/' + this.latestAction)
+      .subscribe(res => this.videoList = res);
   }
 
   showTopVideos(num: number = 10) {
-    return this.http.get(this.videosAPI + '/' + this.topAction + '/' + num)
-      .subscribe(res => this.videoList = res as Video[]);
-  }
-
-  sortByData(order: boolean = false) {
-
+    return this.http.get<UserRelatedVideoInfo[]>(this.videosAPI + '/' + this.topAction + '/' + num)
+      .subscribe(res => this.videoList = res);
   }
 }

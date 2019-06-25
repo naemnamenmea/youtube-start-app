@@ -5,16 +5,20 @@ using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using AutoMapper;
 
 namespace CoreWebAPI.Services
 {
     public class VideoService : IVideoService
     {
+        private readonly IMapper _mapper;
         private readonly DataContext _context;
 
-        public VideoService(DataContext ctx)
+        public VideoService(DataContext ctx, IMapper mapper)
         {
             _context = ctx;
+            _mapper = mapper;
         }
 
         public void AddVideoAsync(Video video)
@@ -47,9 +51,22 @@ namespace CoreWebAPI.Services
             return await _context.VideoItems.OrderByDescending(video => video.TotalRating).Take(num).ToListAsync();
         }
 
-        public async Task<ActionResult<IEnumerable<object>>> GetVideosAsync()
+        public async Task<ActionResult<IEnumerable<Video>>> GetVideosAsync()
         {
             return await _context.VideoItems.ToListAsync();
+        }
+
+        public async Task<ActionResult<IEnumerable<UserRelatedVideoInfo>>> GetUserRelatedVideoInfoAsync(int userId)
+        {
+            List<Video> videos = await _context.VideoItems.ToListAsync();
+            var res = new List<UserRelatedVideoInfo>();
+            foreach (var video in videos)
+            {
+                var tmp = _mapper.Map<UserRelatedVideoInfo>(video);
+                tmp.IsModifiable = (_context.Grades.Find(userId, video.Id) == null);
+                res.Add(tmp);
+            }
+            return res;
         }
 
         public void Remove(Video video)
@@ -103,7 +120,7 @@ namespace CoreWebAPI.Services
     {
         Task<ActionResult<IEnumerable<Video>>> GetTopVideosAsync(int num);
         Task<ActionResult<IEnumerable<Video>>> GetLatestVideosAsync();
-        Task<ActionResult<IEnumerable<object>>> GetVideosAsync();
+        Task<ActionResult<IEnumerable<Video>>> GetVideosAsync();
         Task<Video> FindVideoAsync(int id);
         Task<Video> FindVideoAsync(string url);
         void AddVideoAsync(Video video);
@@ -111,5 +128,6 @@ namespace CoreWebAPI.Services
         void ChangeVideoState(Video video, EntityState modified);
         void Remove(Video video);
         object Vote(int userId, int id, float grade);
+        Task<ActionResult<IEnumerable<UserRelatedVideoInfo>>> GetUserRelatedVideoInfoAsync(int userId);
     }
 }
