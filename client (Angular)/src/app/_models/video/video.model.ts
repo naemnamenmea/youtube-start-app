@@ -10,5 +10,5 @@ export class Video {
 }
 
 export class UserRelatedVideoInfo extends Video {
-    IsModifiable: boolean;
+    isModifiable: boolean;
 }

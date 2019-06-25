@@ -1,7 +1,7 @@
 <table class="table table-hover video-table mx-auto">
   <tr *ngFor="let video of service.videoList">
     <td class="container-fluid d-flex video-container">
-      <a data-fancybox="gallery" href="https://www.youtube.com/watch?v={{video.id}}">
+      <a data-fancybox="gallery" href="https://www.youtube.com/watch?v={{video.videoId}}">
         <img class="video-thumbnail" [src]="video.thumbnail">
       </a>
       <div class="d-flex flex-wrap video-info bg-light align-content-between w-100">
@@ -20,7 +20,7 @@
             <span class="star" [class.full]="fill === 100">&#9733;</span>
           </ng-template>
           <ngb-rating #rating class="rating_panel" [rate]="video.avRating" [max]=5 [starTemplate]="t"
-            [readonly]="!video.IsModifiable" (rateChange)="vote(video,rating.rate)"></ngb-rating>
+            [readonly]="!video.isModifiable" (rateChange)="vote(video,rating.rate)"></ngb-rating>
         </div>
       </div>
     </td>

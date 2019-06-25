@@ -33,8 +33,6 @@ export class VideoService {
   refreshList() {
     this.getAllVideosWithInfo().toPromise().then(res => {
       this.videoList = res;
-      console.log(this.videoList);
-      console.log(typeof this.videoList[0].IsModifiable);
     }).catch(e => console.log(e));
   }
 

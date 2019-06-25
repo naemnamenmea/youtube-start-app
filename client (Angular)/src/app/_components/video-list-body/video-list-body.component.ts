@@ -31,7 +31,7 @@ export class VideoListBodyComponent implements OnInit {
   vote(video: UserRelatedVideoInfo, vote: any) {
     let videoId = video.id;
     this.service.sendVote(videoId, vote).toPromise().then(res => {
-      video.IsModifiable = false;
+      video.isModifiable = false;
       let newAverageRating = res.avRating;
       if (typeof newAverageRating != "number")
         throw Error("newAverageRating is undefined");

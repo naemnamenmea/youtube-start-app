@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,CAAC,AAAA,OAAO,CAAC;EACL,MAAM,EAAE,OAAO;CAGlB",
+    "sources": [
+        "nav-panel.component.scss"
+    ],
+    "names": [],
+    "file": "nav-panel.component.css"
+}
