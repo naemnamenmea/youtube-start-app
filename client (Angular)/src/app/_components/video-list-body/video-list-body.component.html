@@ -20,7 +20,7 @@
             <span class="star" [class.full]="fill === 100">&#9733;</span>
           </ng-template>
           <ngb-rating #rating class="rating_panel" [rate]="video.avRating" [max]=5 [starTemplate]="t"
-            [readonly]="!video.IsModifiable" (rateChange)="vote(video,rating.rate)"></ngb-rating>
+            [readonly]="!video.isModifiable" (rateChange)="vote(video,rating.rate)"></ngb-rating>
         </div>
       </div>
     </td>

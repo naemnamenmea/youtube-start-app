@@ -1,0 +1,15 @@
+a.active {
+  background-color: #989898;
+  color: white;
+  border-radius: 10px;
+}
+
+a:hover {
+  color: white;
+}
+
+a.logout {
+  color: red !important;
+  cursor: pointer;
+}
+/*# sourceMappingURL=video-list-header.component.css.map */

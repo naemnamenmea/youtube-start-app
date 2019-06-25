@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,CAAC,AAAA,OAAO,CAAC;EACL,gBAAgB,EAAE,OAAO;EACzB,KAAK,EAAE,KAAK;EACZ,aAAa,EAAE,IAAI;CACtB;;AAED,AAAA,CAAC,AAAA,MAAM,CAAC;EACJ,KAAK,EAAE,KAAK;CACf;;AAED,AAAA,CAAC,AAAA,OAAO,CAAC;EACL,KAAK,EAAE,cAAc;EACrB,MAAM,EAAE,OAAO;CAGlB",
+    "sources": [
+        "video-list-header.component.scss"
+    ],
+    "names": [],
+    "file": "video-list-header.component.css"
+}

@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,WAAW,CAAC;EACR,SAAS,EAAE,MAAM;CACpB",
+    "sources": [
+        "video-list.component.scss"
+    ],
+    "names": [],
+    "file": "video-list.component.css"
+}
